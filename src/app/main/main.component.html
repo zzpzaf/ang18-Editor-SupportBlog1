@@ -1,0 +1,22 @@
+<!-- <p>main works!</p> -->
+<mat-card appearance="outlined">
+  @if (pgNr === 0) {
+  <mat-card-header>
+    <mat-card-title>{{article.articleTitle}}</mat-card-title>
+    <mat-card-subtitle>{{article.articleSubTitle}}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <mat-card-content>  
+    <!-- {{article.articleContent}} -->
+    <!-- <div [innerHTML]="safeHtmlContent"></div>    -->
+    <markdown [disableSanitizer]="true" [data]="article.articleContent"></markdown> 
+  </mat-card-content>
+} @else if (pgNr > 0) {
+  <mat-card-content>  
+    <!-- {{pageContent}} -->
+    <!-- <div [innerHTML]="pageContent"></div>  -->
+    <div [innerHTML]="safeHtmlContent"></div>  
+    <!-- <iframe [src]="externaURLsafeContent"  width="98%" height="100%" style="border:none;  display: block; margin: 0 auto;"></iframe> -->
+  </mat-card-content>
+}
+</mat-card>
