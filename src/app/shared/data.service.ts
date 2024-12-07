@@ -48,7 +48,11 @@ export class DataService {
     .pipe(retry(1), catchError(this.handleError));
   }
 
-
+  addArticle(newArticle: IArticle): Observable<IArticle> {
+    return this.http
+      .post<IArticle>(this.baseURL + `articles`, newArticle)
+      .pipe(retry(1), catchError(this.handleError));
+  }
 
 
   // getArticle(article: number| string): Observable<IArticle> {

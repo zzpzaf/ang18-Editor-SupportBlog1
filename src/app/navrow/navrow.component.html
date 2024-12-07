@@ -14,8 +14,15 @@
       @if (isNavMenuItems2Visible) { Post Categories : } @else { Posts }
       </button>
 
-
-      </div>
+      @if (!isNavMenuItems2Visible) {
+        <button
+          mat-raised-button
+          (click)="newPostClicked()">
+          New Post
+        </button>
+      }
+      
+    </div>
 
       <!-- Conditional Buttons: Shown/Hidden Based on isMenuVisible -->
       @if (isNavMenuItems2Visible) {

@@ -5,6 +5,7 @@ import { LeftpaneComponent } from '../leftpane/leftpane.component';
 import { MainComponent } from '../main/main.component';
 import { RightpaneComponent } from '../rightpane/rightpane.component';
 import { FooterComponent } from '../footer/footer.component';
+import { NewpostComponent } from '../newpost/newpost.component';
 
 export interface Tile {
   cols: number;
@@ -47,6 +48,13 @@ export const TilesNoPosts: Tile[] = [
   { text: 'footer', cols: 12, rows: 2, color: 'lightseagreen' },
 ];
 
+export const TilesNewPost: Tile[] = [
+  { text: 'header', cols: 12, rows: 2, color: 'dodgerblue' },
+  { text: 'navrow', cols: 12, rows: 2, color: 'lightblue' },
+  { text: 'newpost', cols: 12, rows: 16, color: 'lightgray' },
+  { text: 'footer', cols: 12, rows: 2, color: 'lightseagreen' },
+];
+
 interface DynLayOutComponentsType {
   [key: string]: Type<any>;
 }
@@ -56,6 +64,7 @@ export const DynLayOutComponents: DynLayOutComponentsType = {
   navrow: NavrowComponent,
   leftpane: LeftpaneComponent,
   main: MainComponent,
+  newpost: NewpostComponent,
   rightpane: RightpaneComponent,
   footer: FooterComponent,
 };

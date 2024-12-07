@@ -3,7 +3,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { AddCompDynDirective } from './add-comp-dyn.directive';
 import { ContentService } from './shared/content.service';
-import { Tile, TilesLarge, TilesMedium, TilesNoPosts, TilesSmall } from './objects/blogObjects';
+import { Tile, TilesLarge, TilesMedium, TilesNewPost, TilesNoPosts, TilesSmall } from './objects/blogObjects';
 
 const ComponentName = 'AppComponent';
 
@@ -20,34 +20,42 @@ const ComponentName = 'AppComponent';
 export class AppComponent {
   private breakpointObserver = inject(BreakpointObserver);
   private componentName = this.constructor.name.replace('_', '');
-  public title = 'Angular18-Holy-Grail-repo1(Grid)';
+  // public title = 'Angular18-Holy-Grail-repo1(Grid)';
   public tiles: Tile[] = [];
 
   private currentBreakpoint: string = '';
 
   private contentService = inject(ContentService);
   private noPostsPageNumber: number = 0;
+  private isNewPost: boolean = false;
 
   constructor() {
     effect(() => {
       this.noPostsPageNumber = this.contentService.$noPostsPageNr();
+      this.isNewPost = this.contentService.$newPost();
       // console.log("'>===>> ' + ComponentName + ' - ' + NoPosts Page Nr ? " + this.noPostsPageNumber);
-      if (this.noPostsPageNumber === 0) {
-        this.getBreakepoints();
+      if (!this.isNewPost) {
+        if (this.noPostsPageNumber === 0) {
+          this.getBreakepoints();
         } else {
           this.tiles = TilesNoPosts;
         }
-        // console.log('>===>> ' + ComponentName + ' - ' + "Tiles: " + JSON.stringify(this.tiles));
+      } else {
+        this.tiles = TilesNewPost;
+      }
+      // console.log('>===>> ' + ComponentName + ' - ' + "Tiles: " + JSON.stringify(this.tiles));
     });
   }
 
   private getBreakepoints(): void {
+    // if (this.contentService.$newPost() === true) return;
     this.breakpointObserver
       .observe([Breakpoints.Medium, Breakpoints.Small, Breakpoints.XSmall])
       .subscribe((result) => this.getTiles());
   }
 
   private getTiles(): void {
+    if (this.isNewPost === true) return;
     if (this.noPostsPageNumber) return;
     if (this.breakpointObserver.isMatched(Breakpoints.Medium)) {
       this.currentBreakpoint = Breakpoints.Medium;

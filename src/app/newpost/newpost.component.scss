@@ -1,0 +1,158 @@
+mat-card {
+  height: 100%;
+  width: 100%;
+  border-radius: 0px !important;
+}
+
+mat-card-content {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  //   justify-content: center;
+  //   align-items: center;
+  width: 100%;
+  // height: 100%;
+  height: calc(100% - 64px); // Adjust based on your card header/actions height
+  color: lightgray;
+}
+
+// .editor-container {
+//   display: flex;
+//   justify-content: center;
+//   width: 100%;
+//   padding: 20px;
+// }
+
+.editor-container {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  width: 98%;
+  // max-width: 1200px;
+  margin: 3 auto;
+  height: 100%;
+
+  ::ng-deep {
+    // Make the quill wrapper take full height
+    .quill-wrapper {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .ql-toolbar.ql-snow {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background-color: azure;
+      border-color: #404040;
+      width: 100%;
+    }
+
+    .ql-container {
+      flex: 1;
+      overflow-y: auto;
+      width: 100%;
+    }
+
+    quill-editor {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
+
+mat-card-actions {
+  padding: 16px;
+  // background-color: white;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+
+  button {
+    margin-left: 8px;
+  }
+}
+
+//   .editor-container quill-editor {
+//     width: 90%;
+//     max-width: 1200px; /* optional: sets maximum width */
+//   }
+
+// :host ::ng-deep {
+//     .ql-toolbar.ql-snow {
+//       background-color:azure ; // Change this to your desired background color
+//       border-color: #404040; // Change border color if needed
+//     }
+//     // Add the other styles here as well
+//   }
+
+// :host ::ng-deep {
+//     .ql-editor {
+//     p[data-align='center'] {
+//         text-align: center;
+//         }
+//       img {
+//         max-width: 100%;
+//         height: auto;
+//       }
+//     }
+// }
+
+// We can adjust the colors by changing:
+// stroke for outlined icons
+// fill for filled icons
+// color for text elements
+// Add hover states with different colors
+// Customize active states when buttons are selected
+//   :host ::ng-deep { // Using ::ng-deep to penetrate view encapsulation
+//     // For SVG icons (like bold, italic, etc.)
+//     .ql-toolbar {
+//       .ql-stroke {
+//         stroke: lightgray; // Change this color as needed
+//       }
+
+//       .ql-fill {
+//         fill: lightgray;
+//       }
+
+//       .ql-picker {
+//         color: lightgray; // For dropdown text
+//       }
+
+//       .ql-picker-options {
+//         background-color: #2b2b2b; // For dropdown background
+//         border-color: #404040; // For dropdown border
+//       }
+
+//       .ql-picker-label {
+//         color: lightgray; // For selected item in dropdowns
+//       }
+
+//       // For active/selected states
+//       .ql-active {
+//         .ql-stroke {
+//           stroke: white; // Color when button is active
+//         }
+//         .ql-fill {
+//           fill: white;
+//         }
+//       }
+
+//       // Hover states
+//       button:hover,
+//       button:focus {
+//         .ql-stroke {
+//           stroke: white;
+//         }
+//         .ql-fill {
+//           fill: white;
+//         }
+//       }
+
+//       .ql-picker-label:hover {
+//         color: white;
+//       }
+//     }
+//   }

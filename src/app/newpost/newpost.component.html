@@ -1,0 +1,28 @@
+<!-- <p>newpost works!</p> -->
+
+<mat-card appearance="outlined">
+  <mat-card-header> </mat-card-header>
+
+  <mat-card-content>
+    <div class="editor-container">
+      <quill-editor
+        [(ngModel)]="editorContent"
+        [modules]="editorModules"
+        (onEditorCreated)="editorInit($event)"
+      >
+      </quill-editor>
+    </div>
+  </mat-card-content>
+
+  <!-- <mat-divider></mat-divider> -->
+  <mat-card-actions>
+    <button mat-raised-button 
+        (click)="saveContent()"
+        [disabled]="!editorContent"
+        color="{{ editorContent ? 'primary' : 'accent' }}"
+        >
+        <!-- <mat-icon>save</mat-icon> -->
+        Save New Post 1
+    </button>
+  </mat-card-actions>
+</mat-card>

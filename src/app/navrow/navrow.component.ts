@@ -54,18 +54,25 @@ export class NavrowComponent {
   selectedCategory!: ICategory;
 
 
+  newPostClicked(): void {
+    // console.log('>===>> ' + ComponentName + ' - ' + 'New Post Clicked!');
+    this.contentService.$newPost.set(true);
+  }
 
   toggleNavMenuItems2(): void {
     this.isNavMenuItems2Visible = !this.isNavMenuItems2Visible;
+    this.contentService.$newPost.set(false);
   }
 
 
   pageClicked(page: IPage): void {
     // console.log('>===>> ' + ComponentName + ' - ' + 'Page Nr Clicked', page.PageTitle);
     this.contentService.signalPageContent(page.PageId);
+    this.contentService.$newPost.set(false);
   }
 
   postCategoryClicked(category: ICategory): void {
+    this.contentService.$newPost.set(false);
     if (
       this.selectedCategory.categoryId != category.categoryId ||
       this.contentService.$noPostsPageNr() > 0

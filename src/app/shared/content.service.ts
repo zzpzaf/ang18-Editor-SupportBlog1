@@ -28,6 +28,7 @@ export class ContentService {
 
   public $noPostsPageNr = signal<number>(0);
   public $pageContent = signal<string>('');
+  public $newPost = signal<boolean>(false);
 
   public $categories = signal<ICategory[]>([]);
   public $category = signal<ICategory>({ categoryId: 0, categoryTitle: '' });
@@ -66,6 +67,9 @@ export class ContentService {
   
     // Listen to popstate events (back/forward browser buttons)
     this.platformLocation.onPopState(() => {
+
+      this.$newPost.set(false);
+
       this.isPopStateNavigation = true;  // Set the flag
       const newUrl = this.location.path();
       // console.log('>=====>> ' + ComponentName + 'Browser back/forward detected, new URL:', newUrl);
@@ -77,6 +81,8 @@ export class ContentService {
   }
 
   private handleURLChanges(url: string): void {
+
+    this.$newPost.set(false);
 
     // const initialPath: string = this.location.path().trim().slice(1);
     const urlPath: string = url.trim().slice(1);
