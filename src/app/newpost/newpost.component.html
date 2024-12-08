@@ -1,7 +1,11 @@
 <!-- <p>newpost works!</p> -->
 
 <mat-card appearance="outlined">
-  <mat-card-header> </mat-card-header>
+  <mat-card-header> 
+    <span class="mat-card-edit-title">
+      {{ matCardHeaderTitle }}
+    </span> 
+  </mat-card-header>
 
   <mat-card-content>
     <div class="editor-container">
@@ -22,7 +26,14 @@
         color="{{ editorContent ? 'primary' : 'accent' }}"
         >
         <!-- <mat-icon>save</mat-icon> -->
-        Save New Post 1
+        {{saveButtonCaption}}
     </button>
+    <button mat-raised-button 
+    (click)="cancel()"
+    color="primary"
+    >
+    <!-- <mat-icon>save</mat-icon> -->
+    {{cancelButtonCaption}}
+</button>
   </mat-card-actions>
 </mat-card>

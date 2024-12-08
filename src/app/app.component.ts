@@ -27,14 +27,14 @@ export class AppComponent {
 
   private contentService = inject(ContentService);
   private noPostsPageNumber: number = 0;
-  private isNewPost: boolean = false;
+  private isNewPost: number = 0;
 
   constructor() {
     effect(() => {
       this.noPostsPageNumber = this.contentService.$noPostsPageNr();
       this.isNewPost = this.contentService.$newPost();
       // console.log("'>===>> ' + ComponentName + ' - ' + NoPosts Page Nr ? " + this.noPostsPageNumber);
-      if (!this.isNewPost) {
+      if (this.isNewPost === 0) {
         if (this.noPostsPageNumber === 0) {
           this.getBreakepoints();
         } else {
@@ -55,8 +55,10 @@ export class AppComponent {
   }
 
   private getTiles(): void {
-    if (this.isNewPost === true) return;
+    
+    if (this.isNewPost) return;
     if (this.noPostsPageNumber) return;
+
     if (this.breakpointObserver.isMatched(Breakpoints.Medium)) {
       this.currentBreakpoint = Breakpoints.Medium;
       this.tiles = TilesMedium;

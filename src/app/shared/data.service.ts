@@ -48,40 +48,21 @@ export class DataService {
     .pipe(retry(1), catchError(this.handleError));
   }
 
-  addArticle(newArticle: IArticle): Observable<IArticle> {
+  addArticle(newArticle: IArticleDTO): Observable<IArticleDTO> {
     return this.http
-      .post<IArticle>(this.baseURL + `articles`, newArticle)
+      .post<IArticleDTO>(this.baseURL + `articles`, newArticle)
+      .pipe(retry(1), catchError(this.handleError));
+  }
+
+  updateArticle(newArticle: IArticleDTO): Observable<IArticleDTO> {
+    return this.http
+      .patch<IArticleDTO>(this.baseURL + `articles`, newArticle)
       .pipe(retry(1), catchError(this.handleError));
   }
 
 
-  // getArticle(article: number| string): Observable<IArticle> {
-  //   switch ( typeof(article) ) {
-  //     case "number":
-  //       return this.getArticleById(article as number);
-  //       //break;
-  //     case "string":
-  //       return this.getArticleBySlug(article as string);
-  //       //break;
-  //     default:
-  //       const msg = "Invalid argument type: article must be a number or string";
-  //       console.log('>===>> ' + ComponentName + ' - ' + msg);
-  //       throw new Error(msg);
-  //       // return of(null);
-  //   }
-  // }
-  // getArticleById(articleId: number): Observable<IArticle> {
-  //   return this.http
-  //     .get<IArticle>(this.baseURL + `articles` + '/articleId/' + articleId)       
-  //     .pipe(retry(1), catchError(this.handleError));
-  // }
-  // getArticleBySlug(articleSlug: string): Observable<IArticle> {
-  //   return this.http
-  //     .get<IArticle>(this.baseURL + `articles` + '/articleSlug/' + articleSlug)       
-  //     .pipe(retry(1), catchError(this.handleError));
-  // }
 
-
+  
 
   getArticleDTO(article: number| string): Observable<IArticleDTO> {
     switch ( typeof(article) ) {

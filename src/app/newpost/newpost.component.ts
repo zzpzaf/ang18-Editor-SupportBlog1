@@ -1,4 +1,4 @@
-import { Component, SecurityContext } from '@angular/core';
+import { Component, effect, inject, SecurityContext } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -9,8 +9,11 @@ import { DomSanitizer } from '@angular/platform-browser';
 
 import { QuillModule } from 'ngx-quill';
 import { DataService } from '../shared/data.service';
-import { ArticleDTO, IArticle } from '../objects/dataObjects';
+import { ArticleDTO } from '../objects/dataObjects';
 import { quilEditorlModules } from '../objects/quillObjects';
+import { Location } from '@angular/common';
+import { ContentService } from '../shared/content.service';
+// import { Router } from '@angular/router';
 
 const ComponentName = 'NewpostComponent';
 
@@ -29,14 +32,33 @@ const ComponentName = 'NewpostComponent';
   styleUrl: './newpost.component.scss',
 })
 export class NewpostComponent {
+  
+  
+  
+  
   editorContent: string = '';
   editorModules = quilEditorlModules;
+  matCardHeaderTitle = 'Editing a post ...'
+  saveButtonCaption = 'Save';
+  cancelButtonCaption = 'Cancel';
 
+  public article: ArticleDTO = new ArticleDTO();
+
+  private contentService = inject(ContentService);
+  // private router = inject(Router);
+  
   constructor(
     private snackBar: MatSnackBar,
     private sanitizer: DomSanitizer,
-    private dataService: DataService
-  ) {}
+    private dataService: DataService,
+    private location: Location
+  ) {
+    effect(() => {
+      this.article = this.contentService.$article();
+      if (this.contentService.$newPost() === 2) this.editorContent = this.article.articleContent;
+    });
+
+  }
 
   // The editorInit uses the clipboard matcher functionality to
   // remove background colors when pasting content into the
@@ -64,15 +86,29 @@ export class NewpostComponent {
     );
   }
 
+  cancel() {
+    this.location.back();
+  }
+
+
   saveContent() {
-    const newArticle: ArticleDTO = new ArticleDTO();
-    newArticle.userId = 1;
-    newArticle.categoryId = 1;
-    newArticle.articleTitle = 'New Article';
-    newArticle.articleSubTitle = 'New Article Sub-Title ';
-    newArticle.articleDescription = 'New Article Description';
-    newArticle.articleSlug = 'new-article';
-    newArticle.articleContent = this.getQuillEditorContent();
+    if (this.contentService.$newPost() === 2) {
+
+      this.article.articleContent = this.getQuillEditorContent();
+      // console.log('>===>> ' + ComponentName + ' - ' +'Updating existing article ' + this.article.articleClientUUID);
+      this.updateArticle(this.article);
+
+    } else if (this.contentService.$newPost() === 1) {
+      const newArticle: ArticleDTO = new ArticleDTO();
+      newArticle.userId = 1;
+      newArticle.categoryId = 1;
+      newArticle.articleTitle = 'New Article';
+      newArticle.articleSubTitle = 'New Article Sub-Title ';
+      newArticle.articleDescription = 'New Article Description';
+      newArticle.articleSlug = 'new-article'; 
+      newArticle.articleContent = this.getQuillEditorContent();
+      this.addArticle(newArticle);
+    }
   }
 
   private getQuillEditorContent(): string {
@@ -81,30 +117,36 @@ export class NewpostComponent {
       : this.cleanupContent(this.editorContent);
   }
 
-  private saveArticle(newArticle: ArticleDTO) {
+
+
+  private addArticle(newArticle: ArticleDTO) {
     this.dataService.addArticle(newArticle).subscribe({
-      next: (resp) => {
-        console.log(
-          '>===>> ' +
-            ComponentName +
-            ' - ' +
-            'Adding new article - Response Value : ' +
-            JSON.stringify(resp)
-        );
-        this.showSnackBar('New Article added: ' + resp);
+      next: (addedArticle) => {
+        // console.log( '>===>> ' + ComponentName + ' - ' + 'Adding new article - Response Value : ' + JSON.stringify(addedArticle) );
+        this.showSnackBar('New Article added with UUID: ' + addedArticle.articleUUID);
       },
       error: (err: any) => {
-        console.log(
-          '>===>> ' +
-            ComponentName +
-            ' - ' +
-            'Adding new article - Response Value : ' +
-            JSON.stringify(err)
-        );
+        console.log( '>===>> ' + ComponentName + ' - ' + 'Adding new article - Response Value : ' + JSON.stringify(err));
         this.showSnackBar(['Error! ' + err]);
       },
     });
   }
+
+  private updateArticle(article: ArticleDTO) {
+    this.dataService.updateArticle(article).subscribe({
+      next: (updatedArticle) => {
+        // console.log('>===>> ' + ComponentName + ' - ' + 'Updating existing article ' + article.articleClientUUID + ' - Response Value : ' + JSON.stringify(updatedArticle));
+        this.showSnackBar('Updated Article UUID: ' + updatedArticle.articleUUID);
+        this.contentService.$newPost.set(0);
+        this.location.back;
+      },
+      error: (err: any) => {
+        console.log('>===>> ' + ComponentName + ' - ' + 'Updating existing  article - Error Response Value : ' +JSON.stringify(err));
+        this.showSnackBar(['Error! ' + err]);
+      },
+    });
+  }
+
 
   private cleanupContent(content: string): string {
     return content

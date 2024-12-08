@@ -50,8 +50,9 @@ export const TilesNoPosts: Tile[] = [
 
 export const TilesNewPost: Tile[] = [
   { text: 'header', cols: 12, rows: 2, color: 'dodgerblue' },
-  { text: 'navrow', cols: 12, rows: 2, color: 'lightblue' },
-  { text: 'newpost', cols: 12, rows: 16, color: 'lightgray' },
+  // { text: 'navrow', cols: 12, rows: 2, color: 'lightblue' },
+  // { text: 'newpost', cols: 12, rows: 16, color: 'lightgray' },
+  { text: 'newpost', cols: 12, rows: 18, color: 'lightgray' },
   { text: 'footer', cols: 12, rows: 2, color: 'lightseagreen' },
 ];
 

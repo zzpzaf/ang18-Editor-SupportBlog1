@@ -23,6 +23,9 @@ const ComponentName = 'NavrowComponent';
   styleUrl: './navrow.component.scss',
 })
 export class NavrowComponent {
+
+
+
   constructor() {
     if (this.contentService.$categories().length > 0) {
       this.navMenuItems2 = this.contentService.$categories();
@@ -39,12 +42,19 @@ export class NavrowComponent {
 
 
   private contentService = inject(ContentService);
-  navbarName: string = 'Navigation';
+  postsButtonCaptionClosed: string = 'Posts';
+  postsButtonCaptionOpen: string = 'Post Categories:';
+  writingButtonCaption: string = 'New Post';
+  
+  
+  // navbarName: string = 'Navigation';
   // navMenuItems1 = Pages;
   navMenuItems1: IPage[] = Pages.filter((page) => page.PageId < 99);
   navMenuItems2: ICategory[] = [];
+
   
   isNavMenuItems2Visible = false;
+  isNavMenuWritingItems = false;
 
   subMenuItemCats: ICategory[] = [];
   catButtonsNr: number = 4;
@@ -56,23 +66,23 @@ export class NavrowComponent {
 
   newPostClicked(): void {
     // console.log('>===>> ' + ComponentName + ' - ' + 'New Post Clicked!');
-    this.contentService.$newPost.set(true);
+    this.contentService.$newPost.set(1);  // 1 means new post 
   }
 
   toggleNavMenuItems2(): void {
     this.isNavMenuItems2Visible = !this.isNavMenuItems2Visible;
-    this.contentService.$newPost.set(false);
+    this.contentService.$newPost.set(0);
   }
 
 
   pageClicked(page: IPage): void {
     // console.log('>===>> ' + ComponentName + ' - ' + 'Page Nr Clicked', page.PageTitle);
     this.contentService.signalPageContent(page.PageId);
-    this.contentService.$newPost.set(false);
+    this.contentService.$newPost.set(0);
   }
 
   postCategoryClicked(category: ICategory): void {
-    this.contentService.$newPost.set(false);
+    this.contentService.$newPost.set(0);
     if (
       this.selectedCategory.categoryId != category.categoryId ||
       this.contentService.$noPostsPageNr() > 0

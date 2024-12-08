@@ -4,6 +4,26 @@
   <mat-card-header>
     <mat-card-title>{{article.articleTitle}}</mat-card-title>
     <mat-card-subtitle>{{article.articleSubTitle}}</mat-card-subtitle>
+    
+  <!-- Add this div to push the menu to the right -->
+  <div style="margin-left: auto;">
+    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+  </div>
+
+    <!-- Define the menu -->
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="onMenuOptionEdit()">
+        <mat-icon>edit</mat-icon>
+        <span>{{ menuOptionEdit }}</span>
+      </button>
+      <button mat-menu-item (click)="onMenuOptionDelete()">
+        <mat-icon>delete</mat-icon>
+        <span>{{menuOptionDelete}}</span>
+      </button>
+    </mat-menu>
+
   </mat-card-header>
   <mat-divider></mat-divider>
   <mat-card-content>  

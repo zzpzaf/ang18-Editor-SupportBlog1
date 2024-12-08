@@ -5,26 +5,19 @@
       <!-- Toggle Button -->
       <div >
 
+   
       <button
-       
         mat-raised-button
         (click)="toggleNavMenuItems2()"
         color="{{ isNavMenuItems2Visible ? 'accent' : 'primary' }}"
       >
-      @if (isNavMenuItems2Visible) { Post Categories : } @else { Posts }
+      @if (isNavMenuItems2Visible) { {{ postsButtonCaptionOpen }} } @else { {{ postsButtonCaptionClosed }} }
       </button>
 
-      @if (!isNavMenuItems2Visible) {
-        <button
-          mat-raised-button
-          (click)="newPostClicked()">
-          New Post
-        </button>
-      }
-      
-    </div>
 
-      <!-- Conditional Buttons: Shown/Hidden Based on isMenuVisible -->
+      
+    <!-- Conditional Buttons: Shown/Hidden Based on isMenuVisible -->
+    </div>
       @if (isNavMenuItems2Visible) {
           <button
             mat-fab
@@ -58,7 +51,19 @@
           </button>
       }
 
+      @if (isNavMenuItems2Visible) {
+        <button
+          style="margin-left: 5%;"
+          color="accent"
+          mat-raised-button
+          (click)="newPostClicked()">
+          {{writingButtonCaption}}
+        </button>
+      }  
+
     </div>
+
+   
 
     <div class="sitemenu">
       @for (item of navMenuItems1; track $index) { @if (item.PageId>1) {

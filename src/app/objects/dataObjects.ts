@@ -15,9 +15,9 @@ export interface ICategory {
     articleSlug: string;
     articleDescription: string;
     articleContent: string;
-    articleStatusId?: number;
-    articleClientUUID?: string;
-    articleUUID?: string;
+    articleStatusId: number;
+    articleClientUUID: string;
+    articleUUID: string;
     articleCreationTimestamp: Date;
     articleLastUpdTimestam: Date;
     
@@ -40,6 +40,9 @@ export interface ICategory {
     articleTitle = '';
     articleSubTitle = '';
     articleContent = '';
+    articleStatusId = -1;
+    articleClientUUID = '';
+    articleUUID = '';
     articleSlug = '';
     articleDescription = '';
     articleCreationTimestamp = new Date("2000-1-1T00:00:0.001");
