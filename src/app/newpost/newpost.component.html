@@ -1,39 +1,117 @@
-<!-- <p>newpost works!</p> -->
 
+<!-- newpost.component.html -->
 <mat-card appearance="outlined">
-  <mat-card-header> 
-    <span class="mat-card-edit-title">
-      {{ matCardHeaderTitle }}
-    </span> 
+
+  <mat-card-header>
+    <mat-card-title class="mat-card-edit-title">Edit a Blog Post ...</mat-card-title>
   </mat-card-header>
 
   <mat-card-content>
-    <div class="editor-container">
-      <quill-editor
-        [(ngModel)]="editorContent"
-        [modules]="editorModules"
-        (onEditorCreated)="editorInit($event)"
-      >
-      </quill-editor>
-    </div>
+    <form [formGroup]="postForm" (ngSubmit)="onSubmit()">
+      <div class="form-container">
+
+
+        <!-- Title field -->
+        <mat-form-field appearance="outline"  class="title-field">
+          <mat-label>Title</mat-label>
+          <input matInput formControlName="title" placeholder="Enter post title">
+          @if (title?.errors?.['required']) {
+            <mat-error>
+              Title is required
+            </mat-error>
+          }
+          @if (title?.errors?.['minlength']) {
+            <mat-error>
+              Title must be at least 5 characters
+            </mat-error>
+          }
+        </mat-form-field>
+
+
+        <!-- Category field should be first -->
+        <mat-form-field appearance="outline">
+          <mat-label>Category</mat-label>
+          <mat-select formControlName="category">
+            @for (cat of categoryOptions; track cat.categoryId) {
+              <mat-option [value]="cat.categoryId">
+                {{cat.categoryTitle}}
+              </mat-option>
+            }
+          </mat-select>
+          @if (category?.errors?.['required']) {
+            <mat-error>
+              Please select a category
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Subtitle field -->
+        <mat-form-field appearance="outline">
+          <mat-label>Subtitle</mat-label>
+          <input matInput formControlName="subtitle" placeholder="Enter post subtitle">
+          @if (subtitle?.errors?.['required']) {
+            <mat-error>
+              Subtitle is required
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Description field -->
+        <mat-form-field appearance="outline">
+          <mat-label>Description</mat-label>
+          <input matInput formControlName="description" placeholder="Enter post description">
+          @if (description?.errors?.['required']) {
+            <mat-error>
+              Description is required
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Slug field -->
+        <mat-form-field appearance="outline">
+          <mat-label>Slug</mat-label>
+          <input matInput formControlName="slug" placeholder="Enter post slug">
+          @if (slug?.errors?.['required']) {
+            <mat-error>
+              Slug is required
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Quill Editor -->
+        <div class="editor-container">
+          <!-- <label class="editor-label">Content</label> -->
+          <quill-editor
+            formControlName="content"
+            [styles]="{height: '100%'}"
+            [modules]="editorModules"
+            (onEditorCreated)="editorInit($event)"
+            placeholder="Write your post content here..."
+          ></quill-editor>
+          @if (content?.touched && content?.errors?.['required']) {
+            <mat-error>
+              Content is required
+            </mat-error>
+          }
+        </div>
+      </div>
+    </form>
   </mat-card-content>
 
-  <!-- <mat-divider></mat-divider> -->
   <mat-card-actions>
-    <button mat-raised-button 
-        (click)="saveContent()"
-        [disabled]="!editorContent"
-        color="{{ editorContent ? 'primary' : 'accent' }}"
-        >
-        <!-- <mat-icon>save</mat-icon> -->
-        {{saveButtonCaption}}
+    <button mat-raised-button
+            [disabled]="postForm.invalid"
+            color="{{ postForm.invalid ? 'primary' : 'accent' }}"
+            (click)="onSubmit()">
+      {{saveButtonCaption}}
     </button>
     <button mat-raised-button 
-    (click)="cancel()"
-    color="primary"
-    >
-    <!-- <mat-icon>save</mat-icon> -->
-    {{cancelButtonCaption}}
-</button>
+            color="accent" 
+            (click)="cancel()">
+      {{cancelButtonCaption}}
+    </button>
+
   </mat-card-actions>
+
+
 </mat-card>

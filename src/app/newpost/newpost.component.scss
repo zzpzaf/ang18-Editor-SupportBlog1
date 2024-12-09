@@ -1,179 +1,235 @@
+// newpost.component.scss
+
+// Define variables at the top of newpost.component.scss
+$primary-text-color: burlywood;
+$hover-color: #00B4FF;
+$border-color: #404040;
+$background-dark: #2b2b2b;
+$scrollbar-thumb: #888;
+$scrollbar-thumb-hover: #555;
+$error-color: crimson;
+$ql-toolbar-color: azure;
+
+
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+
 mat-card {
   height: 100%;
   width: 100%;
-  border-radius: 0px !important;
+  box-sizing: border-box;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+mat-card-header {
+  flex-shrink: 0;
+  // min-height: 64px; // Add minimum height
+  // padding: 16px;    // Add padding
 }
 
 mat-card-content {
-  overflow-y: auto;
+  flex: 1;
+  padding-top: 8px;   // < - - - -
   display: flex;
   flex-direction: column;
-  //   justify-content: center;
-  //   align-items: center;
-  width: 100%;
-  // height: 100%;
-  height: calc(100% - 64px); // Adjust based on your card header/actions height
-  color: lightgray;
+  overflow: hidden; // Prevent content from spilling out
+  
+  form {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
 }
 
-// .editor-container {
-//   display: flex;
-//   justify-content: center;
-//   width: 100%;
-//   padding: 20px;
-// }
-
-.editor-container {
-  display: flex;
-  justify-content: center;
-  position: relative;
-  width: 98%;
-  // max-width: 1200px;
-  margin: 3 auto;
-  height: 100%;
-
+mat-form-field.title-field {
   ::ng-deep {
-    // Make the quill wrapper take full height
-    .quill-wrapper {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
+    // Input font size and text color
+    .mat-mdc-form-field-infix {
+      font-size: 20px;
     }
-
-    .ql-toolbar.ql-snow {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      background-color: azure;
-      border-color: #404040;
-      width: 100%;
-    }
-
-    .ql-container {
-      flex: 1;
-      overflow-y: auto;
-      width: 100%;
-    }
-
-    quill-editor {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
+    // This targets the actual input text
+    .mat-mdc-input-element {
+      // color: burlywood;
+      color: $primary-text-color;
     }
   }
 }
 
+
+
+.form-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow: hidden; // Prevent content from spilling out
+
+  mat-form-field {
+    flex-shrink: 0; // Prevent form fields from shrinking 
+    &:first-of-type {
+      // Apply margin only to first form field
+      margin-top: 8px;
+    }
+
+    // Customize focused state
+    ::ng-deep {
+      .mat-mdc-form-field-focus-overlay {
+        opacity: 0; // Remove default focus overlay
+      }
+
+      // Hover state (when not focused)
+      &:not(.mat-focused):hover {
+        .mdc-notched-outline__leading,
+        .mdc-notched-outline__notch,
+        .mdc-notched-outline__trailing {
+          // border-color: #00B4FF !important; // Your desired hover color
+          border-color: $hover-color !important; // Your desired hover color
+          border-width: 1.5px;
+        }
+      }
+
+      &.mat-focused {
+        .mdc-notched-outline__leading,
+        .mdc-notched-outline__notch,
+        .mdc-notched-outline__trailing {
+          // border-color: #00B4FF !important; // Your desired focus color
+          border-color: $hover-color !important; // Your desired focus color
+          border-width: 2px;
+        }
+
+        // Change label color when focused
+        .mdc-floating-label {
+          // color: #00B4FF !important;
+          color: $hover-color !important;
+        }
+      }
+    }
+    
+  }
+
+
+
+  .editor-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; // Prevent content from spilling out
+    // border: 1px solid #404040;
+    border: 1px solid $border-color;
+    // border: 4px solid #2061e4;
+    border-radius: 4px;
+    transition: border-color 0.2s ease; // Smooth transition for border color
+    
+    // Hover state
+    &:hover {
+      // border-color: #00B4FF;
+      border-color: $hover-color;
+    }
+    
+    // Focus state
+    &.focused {
+      // border-color: #00B4FF;
+      border-color: $hover-color;
+      border-width: 2px;
+    }
+
+
+    
+    ::ng-deep {
+
+      quill-editor {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow: hidden; // Prevent content from spilling out
+        
+        .ql-toolbar.ql-snow {
+          flex-shrink: 0;
+          // background-color: azure;
+          background-color: $ql-toolbar-color;
+          border: none;
+          // border-bottom: 1px solid #404040;
+          border-bottom: 1px solid $border-color;
+          transition: border-color 0.2s ease;
+        }
+
+        .ql-container.ql-snow {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          border: none;
+          height: auto;
+          overflow: hidden; // Prevent content from spilling out
+        }
+
+        .ql-editor {
+          flex: 1;
+          overflow-y: auto !important; // Enable scrolling
+          font-size: 16px;
+          // color: azure;
+          color: $ql-toolbar-color;
+          height: auto;
+          
+          // Scrollbar styling
+          &::-webkit-scrollbar {
+            width: 8px;
+          }
+          
+          &::-webkit-scrollbar-track {
+            // background: #2b2b2b;
+            background: $background-dark;
+          }
+          
+          &::-webkit-scrollbar-thumb {
+            // background: #888;
+            background: $scrollbar-thumb;
+            border-radius: 4px;
+          }
+          
+          &::-webkit-scrollbar-thumb:hover {
+            // background: #555;
+            background: $scrollbar-thumb-hover;
+          }
+
+          // Content styling
+          p {
+            margin-bottom: 1em;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Action buttons
 mat-card-actions {
+  flex-shrink: 0;
   padding: 16px;
-  // background-color: white;
-  border-top: 1px solid rgba(0, 0, 0, 0.12);
-
-  button {
-    margin-left: 8px;
-  }
+  display: flex;
+  justify-content: flex-start;
+  gap: 8px;
+  // border-top: 1px solid rgba(0, 0, 0, 0.12);
 }
+
+
+// Error styles
+mat-error {
+  font-size: 12px;
+  // color: crimson;
+  color: $error-color;
+}
+
 
 .mat-card-edit-title {
   font-size:x-large;
-  color:burlywood;
+  // color:burlywood;
+  color: $primary-text-color;
   margin-bottom: 10px;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//   .editor-container quill-editor {
-//     width: 90%;
-//     max-width: 1200px; /* optional: sets maximum width */
-//   }
-
-// :host ::ng-deep {
-//     .ql-toolbar.ql-snow {
-//       background-color:azure ; // Change this to your desired background color
-//       border-color: #404040; // Change border color if needed
-//     }
-//     // Add the other styles here as well
-//   }
-
-// :host ::ng-deep {
-//     .ql-editor {
-//     p[data-align='center'] {
-//         text-align: center;
-//         }
-//       img {
-//         max-width: 100%;
-//         height: auto;
-//       }
-//     }
-// }
-
-// We can adjust the colors by changing:
-// stroke for outlined icons
-// fill for filled icons
-// color for text elements
-// Add hover states with different colors
-// Customize active states when buttons are selected
-//   :host ::ng-deep { // Using ::ng-deep to penetrate view encapsulation
-//     // For SVG icons (like bold, italic, etc.)
-//     .ql-toolbar {
-//       .ql-stroke {
-//         stroke: lightgray; // Change this color as needed
-//       }
-
-//       .ql-fill {
-//         fill: lightgray;
-//       }
-
-//       .ql-picker {
-//         color: lightgray; // For dropdown text
-//       }
-
-//       .ql-picker-options {
-//         background-color: #2b2b2b; // For dropdown background
-//         border-color: #404040; // For dropdown border
-//       }
-
-//       .ql-picker-label {
-//         color: lightgray; // For selected item in dropdowns
-//       }
-
-//       // For active/selected states
-//       .ql-active {
-//         .ql-stroke {
-//           stroke: white; // Color when button is active
-//         }
-//         .ql-fill {
-//           fill: white;
-//         }
-//       }
-
-//       // Hover states
-//       button:hover,
-//       button:focus {
-//         .ql-stroke {
-//           stroke: white;
-//         }
-//         .ql-fill {
-//           fill: white;
-//         }
-//       }
-
-//       .ql-picker-label:hover {
-//         color: white;
-//       }
-//     }
-//   }
