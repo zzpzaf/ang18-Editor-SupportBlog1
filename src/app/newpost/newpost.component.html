@@ -75,12 +75,25 @@
               <!-- Slug field -->
               <mat-form-field appearance="outline">
                 <mat-label>Slug</mat-label>
-                <input matInput formControlName="slug" placeholder="Enter post slug">
+                <input matInput formControlName="slug" placeholder="Enter post slug" (blur)="onSlugBlur()">
                 @if (slug?.invalid && (slug?.dirty || slug?.touched)) {
                   <mat-error>
                     {{getSlugErrorMessage()}}
                   </mat-error>
                 }
+
+                @if (slug?.pending) {
+                  <mat-hint>
+                    Checking slug availability...
+                  </mat-hint>
+                }
+
+                @if (!slug?.errors && !slug?.pending && slug?.value) {
+                  <mat-hint>
+                    Slug is available
+                  </mat-hint>
+                }
+
                 @if (slug?.value && !isSlugValid()) {
                   <mat-hint>
                     {{getSlugHint()}}

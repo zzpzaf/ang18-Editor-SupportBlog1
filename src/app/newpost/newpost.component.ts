@@ -1,5 +1,5 @@
 import { Component, effect, inject, OnInit, SecurityContext, signal } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, AsyncValidatorFn, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
@@ -15,6 +15,7 @@ import { ArticleDTO, ICategory } from '../objects/dataObjects';
 import { quilEditorlModules } from '../objects/quillObjects';
 import { Location } from '@angular/common';
 import { ContentService } from '../shared/content.service';
+import { catchError, map, Observable, of } from 'rxjs';
 // import { Router } from '@angular/router';
 
 const ComponentName = 'NewpostComponent';
@@ -94,23 +95,15 @@ export class NewpostComponent implements OnInit{
       title: [this.isNew ? '' : this.article.articleTitle, [Validators.required, Validators.minLength(5)]],
       subtitle: [this.isNew ? '' : this.article.articleSubTitle, Validators.required],
       description: [this.isNew ? '' : this.article.articleDescription, Validators.required],
-      slug: [this.isNew ? '' : this.article.articleSlug, [Validators.required, this.slugValidator()]],
+      slug: [this.isNew ? '' : this.article.articleSlug, {
+        validators: [Validators.required, this.slugValidator()],
+        asyncValidators: [this.checkSlugExists()],
+        updateOn: 'blur'
+      }
+      ],
       category: [this.isNew ? '' : this.article.categoryId, Validators.required],
       content: [this.isNew ? '' : this.editorContent, Validators.required]
     });
-
-      // // Add blur event subscription to title control
-      // this.title?.valueChanges.subscribe(() => {
-      //   const titleControl = this.postForm.get('title');
-      //   const slugControl = this.postForm.get('slug');
-
-      //   titleControl?.statusChanges.subscribe(() => {
-      //     if (!titleControl.errors && titleControl.value) {
-      //       const newSlug = this.createSlug(titleControl.value);
-      //       slugControl?.setValue(newSlug, { emitEvent: false });
-      //     }
-      //   });
-      // });
 
   }
 
@@ -191,6 +184,7 @@ export class NewpostComponent implements OnInit{
 
 
 
+
   // The editorInit uses the clipboard matcher functionality to
   // remove background colors when pasting content into the
   // ngx-quill editor.
@@ -240,6 +234,19 @@ export class NewpostComponent implements OnInit{
       this.postForm.patchValue({ slug: newSlug }, { emitEvent: false });
     }
   }
+
+  onSlugBlur() {
+    const slugControl = this.slug;
+    //Is valid ?
+    if (slugControl?.value && !slugControl.errors) {
+      // Force async validation on blur
+      slugControl.updateValueAndValidity();
+    }
+  }
+
+
+
+
   private createSlug(title: string): string {
 
     // List of common stop words to remove
@@ -290,12 +297,27 @@ export class NewpostComponent implements OnInit{
     };
   }
 
+  private checkSlugExists(): AsyncValidatorFn {
+    return (control: AbstractControl): Observable<ValidationErrors | null> => {
+      if (!control.value || control.errors) {
+        return of(null);
+      }
+        return this.dataService.getArticleDTOBySlug(control.value).pipe(
+        map(article => article && article.articleSlug === control.value && (article.articleUUID !== this.article.articleUUID)  ? { slugExists: true } : null),
+        catchError(() => of(null))
+      );
+    };
+  }
+
   getSlugErrorMessage(): string {
     if (this.slug?.errors?.['required']) {
       return 'Slug is required';
     }
     if (this.slug?.errors?.['invalidSlug']) {
       return `Invalid slug format. ${slugErrorSuggestionMessage} Suggestion: ${this.slug.errors['invalidSlug'].expected}`;
+    }
+    if (this.slug?.errors?.['slugExists']) {
+      return 'This slug already exists. Please choose a different one.';
     }
     return '';
   }
