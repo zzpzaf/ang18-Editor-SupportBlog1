@@ -10,6 +10,8 @@ $scrollbar-thumb-hover: #555;
 $error-color: crimson;
 $ql-toolbar-color: azure;
 
+$expansion-panel-hover-color: rgba(224, 227, 226, .08);
+$expansion-panel-header-title-color: darkgrey;
 
 :host {
   display: block;
@@ -232,4 +234,17 @@ mat-error {
   // color:burlywood;
   color: $primary-text-color;
   margin-bottom: 10px;
+}
+
+
+
+::ng-deep {
+  .mat-expansion-panel.mat-expanded .mat-expansion-panel-header:hover {
+    background-color: $expansion-panel-hover-color;  /* Ensure same hovercolor works on expanded panel */
+  }
+  .mat-expansion-panel-header {
+    .mat-expansion-panel-header-title {
+      color: $expansion-panel-header-title-color;
+    }
+  }
 }

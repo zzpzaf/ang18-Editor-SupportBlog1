@@ -1,4 +1,4 @@
-import { Component, effect, inject, OnInit, SecurityContext } from '@angular/core';
+import { Component, effect, inject, OnInit, SecurityContext, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatInputModule } from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
+import {MatExpansionModule} from '@angular/material/expansion';
 import { DomSanitizer } from '@angular/platform-browser';
 import { QuillModule } from 'ngx-quill';
 import { DataService } from '../shared/data.service';
@@ -28,6 +29,7 @@ const ComponentName = 'NewpostComponent';
     MatButtonModule,
     MatInputModule,
     MatSelectModule,
+    MatExpansionModule,
     ReactiveFormsModule,
     QuillModule,
   ],
@@ -55,7 +57,10 @@ export class NewpostComponent implements OnInit{
   private dataService = inject( DataService);
   private location = inject(Location);
   private fb= inject(FormBuilder);
-  private isNew: boolean = true;
+  isNew: boolean = true;
+  
+  readonly panelOpenState = signal(false);
+
   
   constructor(
 
@@ -65,14 +70,6 @@ export class NewpostComponent implements OnInit{
       // Moreover, we do Not need to constantly monitor the changes of signals,
       // we need just once to capture the article and fill0in the form fields.
       // So, the job can be done *solo* in the ngOnInit method.
-
-      // this.article = this.contentService.$article();
-      // this.categoryOptions = this.contentService.$categories();
-      // if (this.contentService.$newPost() == 2) this.isNew = false;   // 2 means existing post
-      // console.log( '>===>> ' + ComponentName + ' - Constructor - ' + 'New Post? ' + this.contentService.$newPost());
-      // this.editorContent = this.isNew ? '' : this.article.articleContent;
-      // console.log( '>===>> ' + ComponentName + ' - Constructor - ' + 'Is a New Post? ' + this.isNew);
-      // this.initForm();
     });
   }
 
