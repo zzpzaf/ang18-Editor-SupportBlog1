@@ -20,7 +20,7 @@
               <!-- Title field -->
               <mat-form-field appearance="outline"  class="title-field">
                 <mat-label>Title</mat-label>
-                <input matInput formControlName="title" placeholder="Enter post title">
+                <input matInput formControlName="title" (blur)="onTitleBlur()" placeholder="Enter post title">
                 @if (title?.errors?.['required']) {
                   <mat-error>
                     Title is required
@@ -81,6 +81,12 @@
                     Slug is required
                   </mat-error>
                 }
+                @if (slug?.errors?.['invalidSlug']) {
+                  <mat-error>
+                    Invalid slug format. Suggested: {{slug?.errors?.['invalidSlug'].expected}}
+                  </mat-error>
+                }
+
               </mat-form-field>
             </div>  
             

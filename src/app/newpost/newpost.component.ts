@@ -1,5 +1,5 @@
 import { Component, effect, inject, OnInit, SecurityContext, signal } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
@@ -94,10 +94,24 @@ export class NewpostComponent implements OnInit{
       title: [this.isNew ? '' : this.article.articleTitle, [Validators.required, Validators.minLength(5)]],
       subtitle: [this.isNew ? '' : this.article.articleSubTitle, Validators.required],
       description: [this.isNew ? '' : this.article.articleDescription, Validators.required],
-      slug: [this.isNew ? '' : this.article.articleSlug, Validators.required],
+      slug: [this.isNew ? '' : this.article.articleSlug, [Validators.required, this.slugValidator()]],
       category: [this.isNew ? '' : this.article.categoryId, Validators.required],
       content: [this.isNew ? '' : this.editorContent, Validators.required]
     });
+
+      // // Add blur event subscription to title control
+      // this.title?.valueChanges.subscribe(() => {
+      //   const titleControl = this.postForm.get('title');
+      //   const slugControl = this.postForm.get('slug');
+
+      //   titleControl?.statusChanges.subscribe(() => {
+      //     if (!titleControl.errors && titleControl.value) {
+      //       const newSlug = this.createSlug(titleControl.value);
+      //       slugControl?.setValue(newSlug, { emitEvent: false });
+      //     }
+      //   });
+      // });
+
   }
 
 
@@ -218,4 +232,74 @@ export class NewpostComponent implements OnInit{
       verticalPosition: 'top',
     });
   }
+
+  onTitleBlur() {
+    const titleValue = this.title?.value;
+    if (titleValue && !this.title?.errors) {
+      const newSlug = this.createSlug(titleValue);
+      this.postForm.patchValue({ slug: newSlug }, { emitEvent: false });
+    }
+  }
+  private createSlug(title: string): string {
+
+    // List of common stop words to remove
+    const stopWords = new Set([
+      'a', 'an', 'and', 'are', 'as', 'at', 'be', 'by', 'for',
+      'from', 'has', 'he', 'in', 'is', 'it', 'its', 'of', 'on',
+      'that', 'the', 'to', 'was', 'were', 'will', 'with'
+    ]);
+
+    return title
+      .toLowerCase() // Convert to lowercase
+      // Remove special characters and replace with space
+      .replace(/[^a-z0-9\s]/g, ' ')
+      // Replace multiple spaces with single space
+      .replace(/\s+/g, ' ')
+      .trim()
+      // Split into words, remove stop words, and join back
+      .split(' ')
+      .filter(word => word.length > 0 && !stopWords.has(word))
+      .join(' ')
+      // Replace remaining space with single hyphen
+      .replace(/\s/g, '-');
+  }
+
+  private slugValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) {
+        return null; // Let required validator handle empty values
+      }
+  
+      const inputValue = control.value;
+      const validSlug = this.createSlug(inputValue);
+  
+      // Check if the input matches our slug format
+      if (inputValue !== validSlug) {
+        return {
+          invalidSlug: {
+            value: inputValue,
+            expected: validSlug,
+            message: 'Slug must be lowercase, contain no special characters or stop words, and use single hyphens between words'
+          }
+        };
+      }
+  
+      return null;
+    };
+  }
+
+  // getSlugErrorMessage(): string {
+  //   if (this.slug?.errors?.['required']) {
+  //     return 'Slug is required';
+  //   }
+  //   if (this.slug?.errors?.['invalidSlug']) {
+  //     return `Invalid slug format. Suggested: ${this.slug.errors['invalidSlug'].expected}`;
+  //   }
+  //   return '';
+  // }
+  
+  // isSlugValid(): boolean {
+  //   return this.slug?.valid || false;
+  // }
+
 }
