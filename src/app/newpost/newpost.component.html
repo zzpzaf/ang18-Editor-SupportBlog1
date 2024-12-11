@@ -76,17 +76,16 @@
               <mat-form-field appearance="outline">
                 <mat-label>Slug</mat-label>
                 <input matInput formControlName="slug" placeholder="Enter post slug">
-                @if (slug?.errors?.['required']) {
+                @if (slug?.invalid && (slug?.dirty || slug?.touched)) {
                   <mat-error>
-                    Slug is required
+                    {{getSlugErrorMessage()}}
                   </mat-error>
                 }
-                @if (slug?.errors?.['invalidSlug']) {
-                  <mat-error>
-                    Invalid slug format. Suggested: {{slug?.errors?.['invalidSlug'].expected}}
-                  </mat-error>
+                @if (slug?.value && !isSlugValid()) {
+                  <mat-hint>
+                    {{getSlugHint()}}
+                  </mat-hint>
                 }
-
               </mat-form-field>
             </div>  
             

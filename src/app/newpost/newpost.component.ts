@@ -18,7 +18,7 @@ import { ContentService } from '../shared/content.service';
 // import { Router } from '@angular/router';
 
 const ComponentName = 'NewpostComponent';
-
+const slugErrorSuggestionMessage: string = 'Slugs should be lowercase with single hyphens between words.Containing no special characters or stop words';
 @Component({
   selector: 'app-newpost',
   standalone: true,
@@ -271,6 +271,8 @@ export class NewpostComponent implements OnInit{
       }
   
       const inputValue = control.value;
+      // const testSlug = this.title?.value ? this.title.value : this.createSlug(inputValue);
+      // const testSlug = this.title?.value;
       const validSlug = this.createSlug(inputValue);
   
       // Check if the input matches our slug format
@@ -279,7 +281,7 @@ export class NewpostComponent implements OnInit{
           invalidSlug: {
             value: inputValue,
             expected: validSlug,
-            message: 'Slug must be lowercase, contain no special characters or stop words, and use single hyphens between words'
+            message: slugErrorSuggestionMessage
           }
         };
       }
@@ -288,18 +290,26 @@ export class NewpostComponent implements OnInit{
     };
   }
 
-  // getSlugErrorMessage(): string {
-  //   if (this.slug?.errors?.['required']) {
-  //     return 'Slug is required';
-  //   }
-  //   if (this.slug?.errors?.['invalidSlug']) {
-  //     return `Invalid slug format. Suggested: ${this.slug.errors['invalidSlug'].expected}`;
-  //   }
-  //   return '';
-  // }
+  getSlugErrorMessage(): string {
+    if (this.slug?.errors?.['required']) {
+      return 'Slug is required';
+    }
+    if (this.slug?.errors?.['invalidSlug']) {
+      return `Invalid slug format. ${slugErrorSuggestionMessage} Suggestion: ${this.slug.errors['invalidSlug'].expected}`;
+    }
+    return '';
+  }
   
-  // isSlugValid(): boolean {
-  //   return this.slug?.valid || false;
-  // }
+  isSlugValid(): boolean {
+    return this.slug?.valid || false;
+  }
+
+  getSlugHint(): string {
+    if (this.slug?.value) {
+      const hint: string = slugErrorSuggestionMessage;
+      return `${hint}. Suggestion: ${this.createSlug(this.slug.value)}`;
+    }
+    return '';
+  }
 
 }
