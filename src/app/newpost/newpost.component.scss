@@ -141,8 +141,6 @@ mat-form-field.title-field {
       border-width: 2px;
     }
 
-
-    
     ::ng-deep {
 
       quill-editor {
@@ -248,3 +246,315 @@ mat-error {
     }
   }
 }
+
+
+
+  ::ng-deep {
+
+    // Make sure the toolbar container allows overflow
+    
+  // The editor container might also need overflow adjustment
+  .editor-container {
+    overflow: visible !important;
+    
+    quill-editor {
+      overflow: visible !important;
+    }
+  }
+    
+    .ql-toolbar {
+      overflow: visible !important;
+    }
+
+    // The container holding the toolbar
+    .ql-container {
+      overflow: visible !important;
+    }
+
+    .ql-formats {
+      overflow: visible !important;
+    }
+
+    .ql-formats button {
+      overflow: visible !important;
+    }
+
+
+    /** All toolbar buttons are inside of .ql-formats */
+    .ql-formats button {
+      position: relative;
+
+      /** Set a tooltip with css pseudo-elements, when buttons are hover, active or focus  */
+      &:hover::after,
+      &:active::after,
+      &:focus::after {
+          background: #213664;  //$expansion-panel-hover-color;
+          color: white;
+          padding: 0.5em;
+          border-width: 2px;
+          border-color: #00B4FF;
+          border-radius: 0.4em;
+          top: -120%;
+          left: -10px;
+          z-index: 999990;
+          position: absolute;
+          font-size: 12px;
+
+      }
+    }
+    /** Set tooltip content for bold button **/
+    .ql-bold {
+      &:hover::after,
+      &:active::after,
+      &:focus::after {
+          content: "Bold";
+      }
+    }
+
+    .ql-italic {
+      &:hover::after,
+      &:active::after,
+      &:focus::after {
+          content: "Italic";
+      }
+    }
+
+    .ql-underline {
+      &:hover::after,
+      &:active::after,
+      &:focus::after {
+          content: "Underline";
+      }
+    }
+    .ql-strike {
+      &:hover::after,
+      &:active::after,
+      &:focus::after {
+          content: "Strikeout";
+      }
+    }
+
+
+    .ql-blockquote {
+      &:hover::after,
+      &:active::after,
+      &:focus::after {
+          content: "Quote";
+      }
+    }
+    .ql-code-block {
+      &:hover::after,
+      &:active::after,
+      &:focus::after {
+          content: "Code Block";
+          top: -200% !important;
+      }
+    }
+
+
+    .ql-header[value="2"] {
+      &:hover::after,
+      &:active::after,
+      &:focus::after {
+          content: "Header2";
+          // top: -200%;
+      }
+    }
+    .ql-header[value="4"] {
+      &:hover::after,
+      &:active::after,
+      &:focus::after {
+          content: "Header4";
+          // top: -200%;
+      }
+    }
+
+
+
+    .ql-list[value="bullet"] {
+      &:hover::after,
+      &:active::after,
+      &:focus::after {
+          content: "Bulleted List";
+          top: -200%;
+      }
+    }
+    .ql-list[value="ordered"] {
+      &:hover::after,
+      &:active::after,
+      &:focus::after {
+          content: "Numbered List";
+          top: -200%;
+      }
+    }
+
+
+
+    .ql-script[value="sub"] {
+      &:hover::after,
+      &:active::after,
+      &:focus::after {
+          content: "Subscript";
+          // top: -200%;
+      }
+    }
+    .ql-script[value="super"] {
+      &:hover::after,
+      &:active::after,
+      &:focus::after {
+          content: "Superscript";
+          // top: -200%;
+      }
+    }
+
+
+    .ql-indent[value="-1"] {
+      &:hover::after,
+      &:active::after,
+      &:focus::after {
+          content: "Outdent";
+          // top: -200%;
+      }
+    }
+    .ql-indent[value="+1"] {
+      &:hover::after,
+      &:active::after,
+      &:focus::after {
+          content: "Indent";
+          // top: -200%;
+      }
+    }
+
+    .ql-direction[value="rtl"] {
+      &:hover::after,
+      &:active::after,
+      &:focus::after {
+          content: "Right\00A0To\00A0Left Direction";
+          top: -190% !important;
+      }
+    }
+
+    .ql-picker.ql-header .ql-picker-label {
+      &:hover::after,
+      &:active::after,
+      &:focus::after {
+          content: "Headers";
+          position: absolute;
+          top: -120% !important;
+          left: 0;
+          z-index: 999990; 
+          background: #213664;
+          color: white;
+          padding: 0.5em;
+          border-radius: 0.4em;
+          font-size: 12px;
+      }
+    }
+
+
+
+    .ql-picker.ql-color .ql-picker-label {
+      &:hover::after,
+      &:active::after,
+      &:focus::after {
+          content: "Color Picker";
+          position: absolute;
+          top: -190% !important;
+          left: 0;
+          z-index: 999990; 
+          background: #213664;
+          color: white;
+          padding: 0.5em;
+          border-radius: 0.4em;
+          font-size: 12px;
+      }
+    }
+    .ql-picker.ql-background .ql-picker-label {
+      &:hover::after,
+      &:active::after,
+      &:focus::after {
+          content: "Background Color\00A0Picker";
+          position: absolute;
+          top: -190% !important;
+          left: 0;
+          z-index: 999990; 
+          background: #213664;
+          color: white;
+          padding: 0.5em;
+          border-radius: 0.4em;
+          font-size: 12px;
+      }
+    }
+
+
+    .ql-picker.ql-font .ql-picker-label {
+      &:hover::after,
+      &:active::after,
+      &:focus::after {
+          content: "Font Selection";
+          position: absolute;
+          top: -120% !important;
+          left: 0;
+          z-index: 999990; 
+          background: #213664;
+          color: white;
+          padding: 0.5em;
+          border-radius: 0.4em;
+          font-size: 12px;
+      }
+    }
+
+
+    .ql-picker.ql-align .ql-picker-label {
+      &:hover::after,
+      &:active::after,
+      &:focus::after {
+          content: "Alignment";
+          position: absolute;
+          top: -120% !important;
+          left: 0;
+          z-index: 999990; 
+          background: #213664;
+          color: white;
+          padding: 0.5em;
+          border-radius: 0.4em;
+          font-size: 12px;
+      }
+    }
+
+
+    .ql-clean {
+      &:hover::after,
+      &:active::after,
+      &:focus::after {
+          content: "Clean\00A0Text Formatting";
+          top: -200% !important;
+          // z-index: 999999;
+      }
+    }
+
+
+    .ql-link {
+      &:hover::after,
+      &:active::after,
+      &:focus::after {
+          content: "Hyperlink";
+      }
+    }
+    .ql-image {
+      &:hover::after,
+      &:active::after,
+      &:focus::after {
+          content: "Image";
+      }
+    }
+    .ql-video {
+      &:hover::after,
+      &:active::after,
+      &:focus::after {
+          content: "Video";
+      }
+    }
+
+
+  }
