@@ -1,25 +1,15 @@
 // newpost.component.scss
 
-// Define variables at the top of newpost.component.scss
-$primary-text-color: burlywood;
-$hover-color: #00B4FF;
-$border-color: #404040;
-$background-dark: #2b2b2b;
-$scrollbar-thumb: #888;
-$scrollbar-thumb-hover: #555;
-$error-color: crimson;
-$ql-toolbar-color: azure;
+@import '../../assets/styles/variables';
 
-$expansion-panel-hover-color: rgba(224, 227, 226, .08);
-$expansion-panel-header-title-color: darkgrey;
-
+// Host Styles
 :host {
   display: block;
   width: 100%;
   height: 100%;
 }
 
-
+// Mat-Card Styles
 mat-card {
   height: 100%;
   width: 100%;
@@ -27,71 +17,58 @@ mat-card {
   border-radius: 0;
   display: flex;
   flex-direction: column;
-}
 
-mat-card-header {
-  flex-shrink: 0;
-  // min-height: 64px; // Add minimum height
-  // padding: 16px;    // Add padding
-}
-
-mat-card-content {
-  flex: 1;
-  padding-top: 8px;   // < - - - -
-  display: flex;
-  flex-direction: column;
-  overflow: hidden; // Prevent content from spilling out
-  
-  form {
-    height: 100%;
+  mat-card-content {
+    flex: 1;
+    padding-top: 8px;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
+
+    form {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
   }
 }
 
+// Form Field Styles
 mat-form-field.title-field {
   ::ng-deep {
-    // Input font size and text color
     .mat-mdc-form-field-infix {
       font-size: 20px;
     }
-    // This targets the actual input text
     .mat-mdc-input-element {
-      // color: burlywood;
       color: $primary-text-color;
     }
   }
 }
-
-
 
 .form-container {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 6px;
-  overflow: hidden; // Prevent content from spilling out
+  overflow: hidden;
 
   mat-form-field {
-    flex-shrink: 0; // Prevent form fields from shrinking 
+    flex-shrink: 0;
+
     &:first-of-type {
-      // Apply margin only to first form field
       margin-top: 8px;
     }
 
-    // Customize focused state
     ::ng-deep {
       .mat-mdc-form-field-focus-overlay {
-        opacity: 0; // Remove default focus overlay
+        opacity: 0;
       }
 
-      // Hover state (when not focused)
       &:not(.mat-focused):hover {
         .mdc-notched-outline__leading,
         .mdc-notched-outline__notch,
         .mdc-notched-outline__trailing {
-          // border-color: #00B4FF !important; // Your desired hover color
-          border-color: $hover-color !important; // Your desired hover color
+          border-color: $hover-color !important;
           border-width: 1.5px;
         }
       }
@@ -100,461 +77,182 @@ mat-form-field.title-field {
         .mdc-notched-outline__leading,
         .mdc-notched-outline__notch,
         .mdc-notched-outline__trailing {
-          // border-color: #00B4FF !important; // Your desired focus color
-          border-color: $hover-color !important; // Your desired focus color
+          border-color: $hover-color !important;
           border-width: 2px;
         }
-
-        // Change label color when focused
         .mdc-floating-label {
-          // color: #00B4FF !important;
           color: $hover-color !important;
         }
       }
     }
-    
+  }
+}
+
+// Editor Styles
+.editor-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: visible; // Ensure tooltips are visible
+  border: 1px solid $border-color;
+  border-radius: 4px;
+  transition: border-color 0.2s ease;
+
+  &:hover {
+    border-color: $hover-color;
   }
 
+  &.focused {
+    border-color: $hover-color;
+    border-width: 2px;
+  }
 
+  ::ng-deep {
+    quill-editor {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: visible;
 
-  .editor-container {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden; // Prevent content from spilling out
-    // border: 1px solid #404040;
-    border: 1px solid $border-color;
-    // border: 4px solid #2061e4;
-    border-radius: 4px;
-    transition: border-color 0.2s ease; // Smooth transition for border color
-    
-    // Hover state
-    &:hover {
-      // border-color: #00B4FF;
-      border-color: $hover-color;
-    }
-    
-    // Focus state
-    &.focused {
-      // border-color: #00B4FF;
-      border-color: $hover-color;
-      border-width: 2px;
-    }
+      .ql-toolbar.ql-snow {
+        flex-shrink: 0;
+        background-color: $ql-toolbar-color;
+        border-bottom: 1px solid $border-color;
+        overflow: visible; // Ensure tooltips are not clipped
+      }
 
-    ::ng-deep {
-
-      quill-editor {
+      .ql-container.ql-snow {
         flex: 1;
         display: flex;
         flex-direction: column;
-        height: 100%;
-        overflow: hidden; // Prevent content from spilling out
-        
-        .ql-toolbar.ql-snow {
-          flex-shrink: 0;
-          // background-color: azure;
-          background-color: $ql-toolbar-color;
-          border: none;
-          // border-bottom: 1px solid #404040;
-          border-bottom: 1px solid $border-color;
-          transition: border-color 0.2s ease;
+        border: none;
+        overflow: visible;
+      }
+
+      .ql-editor {
+        flex: 1;
+        overflow-y: auto !important;
+        font-size: 16px;
+        color: $ql-toolbar-color;
+
+        &::-webkit-scrollbar {
+          width: 8px;
+        }
+        &::-webkit-scrollbar-track {
+          background: $background-dark;
+        }
+        &::-webkit-scrollbar-thumb {
+          background: $scrollbar-thumb;
+          border-radius: 4px;
+        }
+        &::-webkit-scrollbar-thumb:hover {
+          background: $scrollbar-thumb-hover;
         }
 
-        .ql-container.ql-snow {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          border: none;
-          height: auto;
-          overflow: hidden; // Prevent content from spilling out
-        }
-
-        .ql-editor {
-          flex: 1;
-          overflow-y: auto !important; // Enable scrolling
-          font-size: 16px;
-          // color: azure;
-          color: $ql-toolbar-color;
-          height: auto;
-          
-          // Scrollbar styling
-          &::-webkit-scrollbar {
-            width: 8px;
-          }
-          
-          &::-webkit-scrollbar-track {
-            // background: #2b2b2b;
-            background: $background-dark;
-          }
-          
-          &::-webkit-scrollbar-thumb {
-            // background: #888;
-            background: $scrollbar-thumb;
-            border-radius: 4px;
-          }
-          
-          &::-webkit-scrollbar-thumb:hover {
-            // background: #555;
-            background: $scrollbar-thumb-hover;
-          }
-
-          // Content styling
-          p {
-            margin-bottom: 1em;
-          }
+        p {
+          margin-bottom: 1em;
         }
       }
+
+      // Quill Toolbar Tooltip Styles for regular buttons
+      .ql-formats {
+        button, .ql-picker {
+          position: relative;
+        }
+
+        // For regular buttons - using data-tooltip attribute to avoid permanent display
+        button.ql-bold::before { content: 'Bold'; }
+        button.ql-italic::before { content: 'Italic'; }
+        button.ql-underline::before { content: 'Underline'; }
+        button.ql-strike::before { content: 'Strikethrough'; }
+        button.ql-blockquote::before { content: 'Blockquote'; }
+        button.ql-code-block::before { content: 'Code Block'; }
+        button.ql-header[value="2"]::before { content: 'Header 2'; }
+        button.ql-header[value="4"]::before { content: 'Header 4'; }
+        button.ql-list[value="ordered"]::before { content: 'Ordered List'; }
+        button.ql-list[value="bullet"]::before { content: 'Bullet List'; }
+        button.ql-script[value="sub"]::before { content: 'Subscript'; }
+        button.ql-script[value="super"]::before { content: 'Superscript'; }
+        button.ql-indent[value="-1"]::before { content: 'Decrease Indent'; }
+        button.ql-indent[value="+1"]::before { content: 'Increase Indent'; }
+        button.ql-direction[value="rtl"]::before { content: 'Text Direction RTL'; }
+        button.ql-clean::before { content: 'Clear Formatting'; }
+        button.ql-link::before { content: 'Insert Link'; }
+        button.ql-image::before { content: 'Insert Image'; }
+        button.ql-video::before { content: 'Insert Video'; }
+
+        // For dropdown pickers
+        .ql-picker.ql-header .ql-picker-label::after { content: 'Header formatting'; }
+        .ql-picker.ql-color .ql-picker-label::after { content: 'Text color'; }
+        .ql-picker.ql-background .ql-picker-label::after { content: 'Background color'; }
+        .ql-picker.ql-font .ql-picker-label::after { content: 'Font family'; }
+        .ql-picker.ql-align .ql-picker-label::after { content: 'Text alignment'; }
+
+        // Common styles for button tooltips
+        button::before {
+          display: none;
+          background: $tooltip-bg;
+          color: $tooltip-color;
+          padding: 0.5em;
+          border-radius: 0.4em;
+          position: absolute;
+          top: -120%;
+          left: 50%;
+          transform: translateX(-50%);
+          font-size: 12px;
+          z-index: 9999;
+          white-space: nowrap;
+        }
+
+        // Show tooltip on hover for buttons
+        button:hover::before {
+          display: block;
+        }
+
+        // Common styles for picker tooltips
+        .ql-picker .ql-picker-label::after {
+          display: none;
+          background: $tooltip-bg;
+          color: $tooltip-color;
+          padding: 0.5em;
+          border-radius: 0.4em;
+          position: absolute;
+          top: -120%;
+          left: 50%;
+          transform: translateX(-50%);
+          font-size: 12px;
+          z-index: 9999;
+          white-space: nowrap;
+        }
+
+        // Show tooltip on hover for pickers
+        .ql-picker .ql-picker-label:hover::after {
+          display: block;
+        }
+      }
+
     }
   }
 }
 
-// Action buttons
-mat-card-actions {
-  flex-shrink: 0;
-  padding: 16px;
-  display: flex;
-  justify-content: flex-start;
-  gap: 8px;
-  // border-top: 1px solid rgba(0, 0, 0, 0.12);
-}
-
-
-// Error styles
+// Error Styles
 mat-error {
   font-size: 12px;
-  // color: crimson;
   color: $error-color;
 }
 
-
 .mat-card-edit-title {
-  font-size:x-large;
-  // color:burlywood;
+  font-size: x-large;
   color: $primary-text-color;
   margin-bottom: 10px;
 }
 
-
-
-::ng-deep {
-  .mat-expansion-panel.mat-expanded .mat-expansion-panel-header:hover {
-    background-color: $expansion-panel-hover-color;  /* Ensure same hovercolor works on expanded panel */
-  }
-  .mat-expansion-panel-header {
-    .mat-expansion-panel-header-title {
-      color: $expansion-panel-header-title-color;
-    }
-  }
+// Expansion Panel Styles
+::ng-deep .mat-expansion-panel.mat-expanded .mat-expansion-panel-header:hover {
+  background-color: rgba(224, 227, 226, 0.08);
 }
 
-
-
-  ::ng-deep {
-
-    // Make sure the toolbar container allows overflow
-    
-  // The editor container might also need overflow adjustment
-  .editor-container {
-    overflow: visible !important;
-    
-    quill-editor {
-      overflow: visible !important;
-    }
-  }
-    
-    .ql-toolbar {
-      overflow: visible !important;
-    }
-
-    // The container holding the toolbar
-    .ql-container {
-      overflow: visible !important;
-    }
-
-    .ql-formats {
-      overflow: visible !important;
-    }
-
-    .ql-formats button {
-      overflow: visible !important;
-    }
-
-
-    /** All toolbar buttons are inside of .ql-formats */
-    .ql-formats button {
-      position: relative;
-
-      /** Set a tooltip with css pseudo-elements, when buttons are hover, active or focus  */
-      &:hover::after,
-      &:active::after,
-      &:focus::after {
-          background: #213664;  //$expansion-panel-hover-color;
-          color: white;
-          padding: 0.5em;
-          border-width: 2px;
-          border-color: #00B4FF;
-          border-radius: 0.4em;
-          top: -120%;
-          left: -10px;
-          z-index: 999990;
-          position: absolute;
-          font-size: 12px;
-
-      }
-    }
-    /** Set tooltip content for bold button **/
-    .ql-bold {
-      &:hover::after,
-      &:active::after,
-      &:focus::after {
-          content: "Bold";
-      }
-    }
-
-    .ql-italic {
-      &:hover::after,
-      &:active::after,
-      &:focus::after {
-          content: "Italic";
-      }
-    }
-
-    .ql-underline {
-      &:hover::after,
-      &:active::after,
-      &:focus::after {
-          content: "Underline";
-      }
-    }
-    .ql-strike {
-      &:hover::after,
-      &:active::after,
-      &:focus::after {
-          content: "Strikeout";
-      }
-    }
-
-
-    .ql-blockquote {
-      &:hover::after,
-      &:active::after,
-      &:focus::after {
-          content: "Quote";
-      }
-    }
-    .ql-code-block {
-      &:hover::after,
-      &:active::after,
-      &:focus::after {
-          content: "Code Block";
-          top: -200% !important;
-      }
-    }
-
-
-    .ql-header[value="2"] {
-      &:hover::after,
-      &:active::after,
-      &:focus::after {
-          content: "Header2";
-          // top: -200%;
-      }
-    }
-    .ql-header[value="4"] {
-      &:hover::after,
-      &:active::after,
-      &:focus::after {
-          content: "Header4";
-          // top: -200%;
-      }
-    }
-
-
-
-    .ql-list[value="bullet"] {
-      &:hover::after,
-      &:active::after,
-      &:focus::after {
-          content: "Bulleted List";
-          top: -200%;
-      }
-    }
-    .ql-list[value="ordered"] {
-      &:hover::after,
-      &:active::after,
-      &:focus::after {
-          content: "Numbered List";
-          top: -200%;
-      }
-    }
-
-
-
-    .ql-script[value="sub"] {
-      &:hover::after,
-      &:active::after,
-      &:focus::after {
-          content: "Subscript";
-          // top: -200%;
-      }
-    }
-    .ql-script[value="super"] {
-      &:hover::after,
-      &:active::after,
-      &:focus::after {
-          content: "Superscript";
-          // top: -200%;
-      }
-    }
-
-
-    .ql-indent[value="-1"] {
-      &:hover::after,
-      &:active::after,
-      &:focus::after {
-          content: "Outdent";
-          // top: -200%;
-      }
-    }
-    .ql-indent[value="+1"] {
-      &:hover::after,
-      &:active::after,
-      &:focus::after {
-          content: "Indent";
-          // top: -200%;
-      }
-    }
-
-    .ql-direction[value="rtl"] {
-      &:hover::after,
-      &:active::after,
-      &:focus::after {
-          content: "Right\00A0To\00A0Left Direction";
-          top: -190% !important;
-      }
-    }
-
-    .ql-picker.ql-header .ql-picker-label {
-      &:hover::after,
-      &:active::after,
-      &:focus::after {
-          content: "Headers";
-          position: absolute;
-          top: -120% !important;
-          left: 0;
-          z-index: 999990; 
-          background: #213664;
-          color: white;
-          padding: 0.5em;
-          border-radius: 0.4em;
-          font-size: 12px;
-      }
-    }
-
-
-
-    .ql-picker.ql-color .ql-picker-label {
-      &:hover::after,
-      &:active::after,
-      &:focus::after {
-          content: "Color Picker";
-          position: absolute;
-          top: -190% !important;
-          left: 0;
-          z-index: 999990; 
-          background: #213664;
-          color: white;
-          padding: 0.5em;
-          border-radius: 0.4em;
-          font-size: 12px;
-      }
-    }
-    .ql-picker.ql-background .ql-picker-label {
-      &:hover::after,
-      &:active::after,
-      &:focus::after {
-          content: "Background Color\00A0Picker";
-          position: absolute;
-          top: -190% !important;
-          left: 0;
-          z-index: 999990; 
-          background: #213664;
-          color: white;
-          padding: 0.5em;
-          border-radius: 0.4em;
-          font-size: 12px;
-      }
-    }
-
-
-    .ql-picker.ql-font .ql-picker-label {
-      &:hover::after,
-      &:active::after,
-      &:focus::after {
-          content: "Font Selection";
-          position: absolute;
-          top: -120% !important;
-          left: 0;
-          z-index: 999990; 
-          background: #213664;
-          color: white;
-          padding: 0.5em;
-          border-radius: 0.4em;
-          font-size: 12px;
-      }
-    }
-
-
-    .ql-picker.ql-align .ql-picker-label {
-      &:hover::after,
-      &:active::after,
-      &:focus::after {
-          content: "Alignment";
-          position: absolute;
-          top: -120% !important;
-          left: 0;
-          z-index: 999990; 
-          background: #213664;
-          color: white;
-          padding: 0.5em;
-          border-radius: 0.4em;
-          font-size: 12px;
-      }
-    }
-
-
-    .ql-clean {
-      &:hover::after,
-      &:active::after,
-      &:focus::after {
-          content: "Clean\00A0Text Formatting";
-          top: -200% !important;
-          // z-index: 999999;
-      }
-    }
-
-
-    .ql-link {
-      &:hover::after,
-      &:active::after,
-      &:focus::after {
-          content: "Hyperlink";
-      }
-    }
-    .ql-image {
-      &:hover::after,
-      &:active::after,
-      &:focus::after {
-          content: "Image";
-      }
-    }
-    .ql-video {
-      &:hover::after,
-      &:active::after,
-      &:focus::after {
-          content: "Video";
-      }
-    }
-
-
-  }
+::ng-deep .mat-expansion-panel-header-title {
+  color: darkgrey;
+}
