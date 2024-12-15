@@ -15,7 +15,8 @@
             <mat-panel-title> {{panelOpenState() ? 'Hide ' : 'Expand for ' }} the rest of the fields... </mat-panel-title>
 
           </mat-expansion-panel-header> 
-            <div class="form-container">
+
+            <div class="exp-container">
 
               <!-- Title field -->
               <mat-form-field appearance="outline"  class="title-field">
@@ -111,7 +112,7 @@
           <!-- <label class="editor-label">Content</label> -->
           <quill-editor
             formControlName="content"
-            [styles]="{height: '100%'}"
+
             [modules]="editorModules"
             (onEditorCreated)="editorInit($event)"
             placeholder="Write your post content here..."

@@ -11,26 +11,43 @@
 
 // Mat-Card Styles
 mat-card {
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100%; 
   width: 100%;
   box-sizing: border-box;
   border-radius: 0;
-  display: flex;
-  flex-direction: column;
+  // overflow-y: auto !important;
+
+
 
   mat-card-content {
     flex: 1;
     padding-top: 8px;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    // overflow: hidden;
+    overflow-y: auto;
+    margin-bottom: 0; // Remove default margin
+    // padding-bottom: 30px; // Add padding to create space above actions
+  
 
     form {
-      height: 100%;
       display: flex;
+      flex: 1;
       flex-direction: column;
+      // overflow-y: auto !important;
+      height: 100%;
+      min-height: min-content; // Ensures form takes minimum required height
+
     }
   }
+
+  mat-expansion-panel {
+    overflow: visible !important;
+    flex: 0 0 auto; // Prevent expansion panel from shrinking
+  }
+  
 }
 
 // Form Field Styles
@@ -45,10 +62,28 @@ mat-form-field.title-field {
   }
 }
 
+.exp-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column ;
+  gap: 6px;
+  overflow: hidden;
+  overflow-y: auto;
+
+
+  mat-form-field {
+    flex-shrink: 0;
+
+    &:first-of-type {
+      margin-top: 8px;
+    }
+  }
+}
+
 .form-container {
   flex: 1;
   display: flex;
-  flex-direction: column;
+  flex-direction: column ;
   gap: 6px;
   overflow: hidden;
 
@@ -93,10 +128,15 @@ mat-form-field.title-field {
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: visible; // Ensure tooltips are visible
-  border: 1px solid $border-color;
-  border-radius: 4px;
-  transition: border-color 0.2s ease;
+  // flex-direction: column;
+  // overflow: visible; // Ensure tooltips are visible
+  // border: 1px solid $border-color;
+  // border-radius: 4px;
+  // transition: border-color 0.2s ease;
+  min-height: 0; // This is important for flex child scrolling
+  max-height: calc(100vh - 200px); // Adjust the subtracted value based on your layout
+  padding-bottom: 30px; 
+
 
   &:hover {
     border-color: $hover-color;
@@ -108,12 +148,21 @@ mat-form-field.title-field {
   }
 
   ::ng-deep {
+    
+    .ql-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
     quill-editor {
       flex: 1;
       display: flex;
       flex-direction: column;
       height: 100%;
       overflow: visible;
+
 
       .ql-toolbar.ql-snow {
         flex-shrink: 0;
@@ -130,11 +179,16 @@ mat-form-field.title-field {
         overflow: visible;
       }
 
+ 
+
       .ql-editor {
         flex: 1;
+        min-height: 100px;
+        // height: auto;
         overflow-y: auto !important;
         font-size: 16px;
         color: $ql-toolbar-color;
+        margin-bottom: 16px; 
 
         &::-webkit-scrollbar {
           width: 8px;
@@ -240,6 +294,12 @@ mat-form-field.title-field {
 mat-error {
   font-size: 12px;
   color: $error-color;
+}
+
+mat-card-actions {
+  flex: 0 0 auto; // Prevent actions from shrinking or growing
+  padding: 8px;
+  margin: 0; // Remove default margins
 }
 
 .mat-card-edit-title {

@@ -8,6 +8,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatInputModule } from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatExpansionModule} from '@angular/material/expansion';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+
 import { DomSanitizer } from '@angular/platform-browser';
 import { QuillModule } from 'ngx-quill';
 import { DataService } from '../shared/data.service';
@@ -16,6 +18,7 @@ import { quilEditorlModules } from '../objects/quillObjects';
 import { Location } from '@angular/common';
 import { ContentService } from '../shared/content.service';
 import { catchError, map, Observable, of } from 'rxjs';
+import { DialogComponent } from '../shared/dialog/dialog.component';
 // import { Router } from '@angular/router';
 
 const ComponentName = 'NewpostComponent';
@@ -60,6 +63,8 @@ export class NewpostComponent implements OnInit{
   private fb= inject(FormBuilder);
   isNew: boolean = true;
   
+  private dialog = inject(MatDialog);
+  private isMarkdown: boolean = false;
   readonly panelOpenState = signal(false);
 
   
@@ -76,7 +81,9 @@ export class NewpostComponent implements OnInit{
 
 
   ngOnInit() {
+    this.isMarkdown = this.contentService.$isMarkdown();
     this.article = this.contentService.$article();
+    if (this.isMarkdown) this.openDialog();
     this.categoryOptions = this.contentService.$categories();
     if (this.contentService.$newPost() == 2) this.isNew = false;
     this.editorContent = this.isNew ? '' : this.article.articleContent;
@@ -86,6 +93,29 @@ export class NewpostComponent implements OnInit{
   }
 
 
+  openDialog(): void {
+    console.log( '>===>> ' + ComponentName + ' - ' + 'Trying to open the Dialog...' );
+    const dialogRef = this.dialog.open(DialogComponent, {
+      data: {
+        header: 'Markdown Content sensed!',
+        content: 'The content of this post is Markdown encoded. Do you want to proceed converting it to HTML?',
+        posAnsMsg: 'Yes',
+        negAnsMsg: 'No'
+      },
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result) {
+        console.log('User chose YES');
+        this.article.articleContent =  await this.contentService.convertMarkdownToHtml( this.article.articleContent);
+        this.postForm.patchValue({ content: this.article.articleContent });
+        // console.log('>===>> ' + ComponentName + ' Markdown content converted to HTML: ' +  this.article.articleContent);
+      } else {
+        // console.log('>===>> ' + ComponentName + ' User chose NO');
+      }
+    });
+  }
 
 
 
