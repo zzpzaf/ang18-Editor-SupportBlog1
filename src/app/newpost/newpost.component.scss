@@ -1,6 +1,7 @@
 // newpost.component.scss
 
 @import '../../assets/styles/variables';
+@import '../../assets/styles/quill1';
 
 // Host Styles
 :host {
@@ -80,6 +81,9 @@ mat-form-field.title-field {
   }
 }
 
+
+
+
 .form-container {
   flex: 1;
   display: flex;
@@ -147,148 +151,17 @@ mat-form-field.title-field {
     border-width: 2px;
   }
 
-  ::ng-deep {
-    
-    .ql-container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      overflow-y: auto;
-    }
-
-    quill-editor {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      overflow: visible;
+}  // <--------------------
 
 
-      .ql-toolbar.ql-snow {
-        flex-shrink: 0;
-        background-color: $ql-toolbar-color;
-        border-bottom: 1px solid $border-color;
-        overflow: visible; // Ensure tooltips are not clipped
-      }
 
-      .ql-container.ql-snow {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        border: none;
-        overflow: visible;
-      }
 
- 
+// } <--------------------
 
-      .ql-editor {
-        flex: 1;
-        min-height: 100px;
-        // height: auto;
-        overflow-y: auto !important;
-        font-size: 16px;
-        color: $ql-toolbar-color;
-        margin-bottom: 16px; 
 
-        &::-webkit-scrollbar {
-          width: 8px;
-        }
-        &::-webkit-scrollbar-track {
-          background: $background-dark;
-        }
-        &::-webkit-scrollbar-thumb {
-          background: $scrollbar-thumb;
-          border-radius: 4px;
-        }
-        &::-webkit-scrollbar-thumb:hover {
-          background: $scrollbar-thumb-hover;
-        }
 
-        p {
-          margin-bottom: 1em;
-        }
-      }
 
-      // Quill Toolbar Tooltip Styles for regular buttons
-      .ql-formats {
-        button, .ql-picker {
-          position: relative;
-        }
 
-        // For regular buttons - using data-tooltip attribute to avoid permanent display
-        button.ql-bold::before { content: 'Bold'; }
-        button.ql-italic::before { content: 'Italic'; }
-        button.ql-underline::before { content: 'Underline'; }
-        button.ql-strike::before { content: 'Strikethrough'; }
-        button.ql-blockquote::before { content: 'Blockquote'; }
-        button.ql-code-block::before { content: 'Code Block'; }
-        button.ql-header[value="2"]::before { content: 'Header 2'; }
-        button.ql-header[value="4"]::before { content: 'Header 4'; }
-        button.ql-list[value="ordered"]::before { content: 'Ordered List'; }
-        button.ql-list[value="bullet"]::before { content: 'Bullet List'; }
-        button.ql-script[value="sub"]::before { content: 'Subscript'; }
-        button.ql-script[value="super"]::before { content: 'Superscript'; }
-        button.ql-indent[value="-1"]::before { content: 'Decrease Indent'; }
-        button.ql-indent[value="+1"]::before { content: 'Increase Indent'; }
-        button.ql-direction[value="rtl"]::before { content: 'Text Direction RTL'; }
-        button.ql-clean::before { content: 'Clear Formatting'; }
-        button.ql-link::before { content: 'Insert Link'; }
-        button.ql-image::before { content: 'Insert Image'; }
-        button.ql-video::before { content: 'Insert Video'; }
-
-        // For dropdown pickers
-        .ql-picker.ql-header .ql-picker-label::after { content: 'Header formatting'; }
-        .ql-picker.ql-color .ql-picker-label::after { content: 'Text color'; }
-        .ql-picker.ql-background .ql-picker-label::after { content: 'Background color'; }
-        .ql-picker.ql-font .ql-picker-label::after { content: 'Font family'; }
-        .ql-picker.ql-align .ql-picker-label::after { content: 'Text alignment'; }
-
-        // Common styles for button tooltips
-        button::before {
-          display: none;
-          background: $tooltip-bg;
-          color: $tooltip-color;
-          padding: 0.5em;
-          border-radius: 0.4em;
-          position: absolute;
-          top: -120%;
-          left: 50%;
-          transform: translateX(-50%);
-          font-size: 12px;
-          z-index: 9999;
-          white-space: nowrap;
-        }
-
-        // Show tooltip on hover for buttons
-        button:hover::before {
-          display: block;
-        }
-
-        // Common styles for picker tooltips
-        .ql-picker .ql-picker-label::after {
-          display: none;
-          background: $tooltip-bg;
-          color: $tooltip-color;
-          padding: 0.5em;
-          border-radius: 0.4em;
-          position: absolute;
-          top: -120%;
-          left: 50%;
-          transform: translateX(-50%);
-          font-size: 12px;
-          z-index: 9999;
-          white-space: nowrap;
-        }
-
-        // Show tooltip on hover for pickers
-        .ql-picker .ql-picker-label:hover::after {
-          display: block;
-        }
-      }
-
-    }
-  }
-}
 
 // Error Styles
 mat-error {

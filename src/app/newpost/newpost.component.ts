@@ -94,7 +94,7 @@ export class NewpostComponent implements OnInit{
 
 
   openDialog(): void {
-    console.log( '>===>> ' + ComponentName + ' - ' + 'Trying to open the Dialog...' );
+    // console.log( '>===>> ' + ComponentName + ' - ' + 'Trying to open the Dialog...' );
     const dialogRef = this.dialog.open(DialogComponent, {
       data: {
         header: 'Markdown Content sensed!',
