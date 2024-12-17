@@ -4,11 +4,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
-import { MatSnackBar } from '@angular/material/snack-bar';
+// import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatInputModule } from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatExpansionModule} from '@angular/material/expansion';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 import { DomSanitizer } from '@angular/platform-browser';
 import { QuillModule } from 'ngx-quill';
@@ -18,7 +18,7 @@ import { quilEditorlModules } from '../objects/quillObjects';
 import { Location } from '@angular/common';
 import { ContentService } from '../shared/content.service';
 import { catchError, map, Observable, of } from 'rxjs';
-import { DialogComponent } from '../shared/dialog/dialog.component';
+import { DialogComponent, IDialogData } from '../shared/dialog/dialog.component';
 // import { Router } from '@angular/router';
 
 const ComponentName = 'NewpostComponent';
@@ -57,7 +57,7 @@ export class NewpostComponent implements OnInit{
   // private router = inject(Router);
   private sanitizer = inject( DomSanitizer);
   private contentService = inject(ContentService);
-  private snackBar = inject( MatSnackBar);
+  // private snackBar = inject( MatSnackBar);
   private dataService = inject( DataService);
   private location = inject(Location);
   private fb= inject(FormBuilder);
@@ -83,7 +83,7 @@ export class NewpostComponent implements OnInit{
   ngOnInit() {
     this.isMarkdown = this.contentService.$isMarkdown();
     this.article = this.contentService.$article();
-    if (this.isMarkdown) this.openDialog();
+    if (this.isMarkdown) this.confirmDialog();
     this.categoryOptions = this.contentService.$categories();
     if (this.contentService.$newPost() == 2) this.isNew = false;
     this.editorContent = this.isNew ? '' : this.article.articleContent;
@@ -93,21 +93,19 @@ export class NewpostComponent implements OnInit{
   }
 
 
-  openDialog(): void {
+  confirmDialog(): void {
     // console.log( '>===>> ' + ComponentName + ' - ' + 'Trying to open the Dialog...' );
-    const dialogRef = this.dialog.open(DialogComponent, {
-      data: {
-        header: 'Markdown Content sensed!',
-        content: 'The content of this post is Markdown encoded. Do you want to proceed converting it to HTML?',
-        posAnsMsg: 'Yes',
-        negAnsMsg: 'No'
-      },
-      disableClose: true
-    });
-
-    dialogRef.afterClosed().subscribe(async (result) => {
+    const dlgData: IDialogData = {
+      token: 'conf',
+      header: 'Markdown-content sensed!',
+      content: 'The content of this post is Markdown encoded. Do you want to proceed converting it to HTML?',
+      posAnsMsg: 'Yes',
+      negAnsMsg: 'No'
+    }
+    const dialogRef  = this.openDialog(dlgData);      // dialogRef:  MatDialogRef<DialogComponent> 
+    dialogRef.afterClosed().subscribe(async (result: any) => {
       if (result) {
-        console.log('User chose YES');
+        // console.log('User chose YES');
         this.article.articleContent =  await this.contentService.convertMarkdownToHtml( this.article.articleContent);
         this.postForm.patchValue({ content: this.article.articleContent });
         // console.log('>===>> ' + ComponentName + ' Markdown content converted to HTML: ' +  this.article.articleContent);
@@ -187,11 +185,27 @@ export class NewpostComponent implements OnInit{
     this.dataService.addArticle(newArticle).subscribe({
       next: (addedArticle) => {
         // console.log( '>===>> ' + ComponentName + ' - ' + 'Adding new article - Response Value : ' + JSON.stringify(addedArticle) );
-        this.showSnackBar('New Article added with UUID: ' + addedArticle.articleUUID);
+        // this.showSnackBar('New Article added with UUID: ' + addedArticle.articleUUID);
+        const dlgData: IDialogData = {
+          token: 'succ',
+          header: 'New Article added!',
+          content: 'New Article added with UUID: ' + addedArticle.articleUUID,
+          posAnsMsg: 'OK',
+          negAnsMsg: ''
+        }
+        this.openDialog(dlgData);
       },
       error: (err: any) => {
         console.log( '>===>> ' + ComponentName + ' - ' + 'Adding new article - Response Value : ' + JSON.stringify(err));
-        this.showSnackBar(['Error! ' + err]);
+        // this.showSnackBar(['Error! ' + err]);
+        const dlgData: IDialogData = {
+          token: 'error',
+          header: 'Error adding a new article!',
+          content: 'Error! ' + err,
+          posAnsMsg: 'OK',
+          negAnsMsg: ''
+        }
+        this.openDialog(dlgData);
       },
     });
   }
@@ -200,13 +214,30 @@ export class NewpostComponent implements OnInit{
     this.dataService.updateArticle(article).subscribe({
       next: (updatedArticle) => {
         // console.log('>===>> ' + ComponentName + ' - ' + 'Updating existing article ' + article.articleClientUUID + ' - Response Value : ' + JSON.stringify(updatedArticle));
-        this.showSnackBar('Updated Article UUID: ' + updatedArticle.articleUUID);
+        // this.showSnackBar('Updated Article UUID: ' + updatedArticle.articleUUID);
+        const dlgData: IDialogData = {
+          token: 'succ',
+          header: 'Article updated!',
+          content: 'The article with UUID: ' + updatedArticle.articleUUID + ' has been updated',
+          posAnsMsg: 'OK',
+          negAnsMsg: ''
+        }
+        this.openDialog(dlgData);
+
         this.contentService.$newPost.set(0);
         this.location.back;
       },
       error: (err: any) => {
-        console.log('>===>> ' + ComponentName + ' - ' + 'Updating existing  article - Error Response Value : ' +JSON.stringify(err));
-        this.showSnackBar(['Error! ' + err]);
+        // console.log('>===>> ' + ComponentName + ' - ' + 'Updating existing  article - Error Response Value : ' +JSON.stringify(err));
+        // this.showSnackBar(['Error! ' + err]);
+        const dlgData: IDialogData = {
+          token: 'error',
+          header: 'Error updating an article!',
+          content: 'Error! ' + err,
+          posAnsMsg: 'OK',
+          negAnsMsg: ''
+        }
+        this.openDialog(dlgData);
       },
     });
   }
@@ -249,13 +280,24 @@ export class NewpostComponent implements OnInit{
       .trim();
   }
 
-  private showSnackBar(resp: any) {
-    this.snackBar.open(resp, 'Close', {
-      duration: 3000,
-      horizontalPosition: 'right',
-      verticalPosition: 'top',
+  // private showSnackBar(resp: any) {
+  //   this.snackBar.open(resp, 'Close', {
+  //     duration: 3000,
+  //     horizontalPosition: 'right',
+  //     verticalPosition: 'top',
+  //   });
+  // }
+
+  openDialog(dlgData: IDialogData): any {
+    // console.log( '>===>> ' + ComponentName + ' - ' + 'Trying to open the Dialog...' );
+    const dialogRef = this.dialog.open(DialogComponent, {
+      data: dlgData,
+      disableClose: true
     });
+    return dialogRef;
   }
+
+
 
   onTitleBlur() {
     const titleValue = this.title?.value;

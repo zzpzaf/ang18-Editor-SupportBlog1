@@ -1,0 +1,135 @@
+@use '@angular/material' as mat;
+
+$info-color: #006FCA;//mat.get-color-from-palette($cyan-palette, 300);
+$conf-color: var(--mdc-filled-button-container-color);  //mat.get-color-from-palette($cyan-palette, 500);
+$succ-color: #21FF3D;   //#4CAF50; // mat.get-color-from-palette($green-palette, 500);
+$error-color: #F44336; //mat.get-color-from-palette($red-palette, 500);
+$warn-color: #FB8C00;  // mat.get-color-from-palette($orange-palette, 600);
+
+// $info-color: #006FCA;/
+// $conf-color: blue;    
+// $succ-color: #21FF3D; 
+// $error-color: #F44336;
+// $warn-color: #FB8C00; 
+
+::ng-deep .mdc-dialog__surface {
+    padding: 15px !important;
+    position: relative !important;
+
+    // Base pseudo-element styles
+    &::after {
+        content: '';
+        position: absolute;
+        top: 10px;          
+        right: 10px;        
+        bottom: 10px;       
+        left: 10px;         
+        border: 1px solid transparent; // Set transparent as default
+        border-radius: 8px;
+        pointer-events: none;
+    }
+
+    // Information dialog
+    &.info-dialog::after {
+        border-color: $info-color;
+    }
+
+    // Confirmation dialog
+    &.conf-dialog::after {
+        border-color: $conf-color;
+    }
+
+    // Success dialog
+    &.succ-dialog::after {
+        border-color: $succ-color;
+    }
+
+    // Error dialog
+    &.error-dialog::after {
+        border-color: $error-color;
+    }
+
+    // Warning dialog
+    &.warn-dialog::after {
+        border-color: $warn-color;
+    }
+}
+
+
+
+
+// Button text colors for positive actions
+.positive-info {
+    color: $info-color !important;
+  }
+  
+  .positive-conf {
+    color: $conf-color !important;
+  }
+  
+  .positive-succ {
+    color: $succ-color !important;
+  }
+  
+  .positive-error {
+    color: $error-color !important;
+  }
+  
+  .positive-warn {
+    color: $warn-color !important;
+  }
+  
+  // Button text colors for negative actions
+  .negative-info {
+    color: $info-color !important;
+  }
+  
+  .negative-conf {
+    color: $conf-color !important;
+  }
+  
+  .negative-succ {
+    color: $succ-color !important;
+  }
+  
+  .negative-error {
+    color: $error-color !important;
+  }
+  
+  .negative-warn {
+    color: $warn-color !important;
+  }
+
+
+
+// Base styles for the dialog icon
+.dialog-icon {
+    font-size: 24px; // Adjust icon size
+    margin-right: 10px; // Add spacing between icon and title text
+    vertical-align: middle; // Align icon with text
+  }
+  
+  // Token-specific styles
+  .info-icon {
+    color: $info-color;
+  }
+  
+  .conf-icon {
+    color: $conf-color;
+  }
+  
+  .succ-icon {
+    color: $succ-color;
+  }
+  
+  .error-icon {
+    color: $error-color;
+  }
+  
+  .warn-icon {
+    color: $warn-color;
+  }
+
+
+
+

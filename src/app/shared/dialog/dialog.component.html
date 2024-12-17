@@ -1,7 +1,7 @@
 <!-- <p>dialog works!</p>-->
 
-<h2 mat-dialog-title>{{ data.header }}</h2>
-<mat-dialog-content>{{ data.content }}</mat-dialog-content>
+<!-- <h2 mat-dialog-title>{{ data.header }}</h2>
+<mat-dialog-content class="message-informational">{{ data.content }}</mat-dialog-content>
 <mat-dialog-actions align="end">
 
   @if (data.negAnsMsg.trim().length == 0 && data.posAnsMsg.trim().length > 0) {
@@ -13,4 +13,56 @@
     <button mat-raised-button (click)="onYesClick()">{{data.posAnsMsg}}</button>
   }
 
+</mat-dialog-actions> -->
+
+
+<h2 mat-dialog-title>
+  <mat-icon [ngClass]="getIconClass(data.token)" class="dialog-icon">
+    {{ getIconName(data.token) }}
+  </mat-icon>
+  {{ data.header }}
+</h2>
+<mat-dialog-content class="message-informational">{{ data.content }}</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <!-- Single positive button -->
+  @if (data.negAnsMsg.trim().length == 0 && data.posAnsMsg.trim().length > 0) {
+    <button 
+      mat-raised-button 
+      cdkFocusInitial 
+      color="primary" 
+      [ngClass]="getButtonClass(data.token, 'positive')" 
+      (click)="onYesClick()">
+      {{ data.posAnsMsg }}
+    </button>
+  } 
+
+  <!-- Single negative button -->
+  @else if (data.negAnsMsg.trim().length > 0 && data.posAnsMsg.trim().length == 0) {
+    <button 
+      mat-raised-button 
+      cdkFocusInitial 
+      color="primary" 
+      [ngClass]="getButtonClass(data.token, 'negative')" 
+      (click)="onNoClick()">
+      {{ data.negAnsMsg }}
+    </button>
+  } 
+
+  <!-- Both buttons -->
+  @else {
+    <button 
+      mat-raised-button 
+      cdkFocusInitial 
+      color="primary" 
+      [ngClass]="getButtonClass(data.token, 'negative')" 
+      (click)="onNoClick()">
+      {{ data.negAnsMsg }}
+    </button>
+    <button 
+      mat-raised-button 
+      [ngClass]="getButtonClass(data.token, 'positive')" 
+      (click)="onYesClick()">
+      {{ data.posAnsMsg }}
+    </button>
+  }
 </mat-dialog-actions>

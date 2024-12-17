@@ -11,6 +11,8 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { MarkdownModule } from 'ngx-markdown';	
 import { SeoService } from '../shared/seo.service';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent, IDialogData } from '../shared/dialog/dialog.component';
 
 const ComponentName = 'MainComponent';
 @Component({
@@ -32,6 +34,8 @@ export class MainComponent {
   private contentService = inject(ContentService);
   private sanitizer = inject(DomSanitizer);
   private seoService = inject(SeoService);
+
+  private dialog = inject(MatDialog);
 
   menuOptionEdit: string = 'Edit';
   menuOptionDelete: string = 'Delete';
@@ -73,6 +77,27 @@ export class MainComponent {
   onMenuOptionDelete() {
     // Implement your delete logic here
     console.log('>===>> ' + ComponentName + ' Delete clicked');
+    const dlgData: IDialogData = {
+      token: 'warn',
+      header: 'Warning!',
+      content: 'You are going to delete this post, permanently! Please confirm!',
+      posAnsMsg: 'Delete',
+      negAnsMsg: 'Cancel'
+    };
+    const dialogRef = this.dialog.open(DialogComponent, {
+      data: dlgData,
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result) {
+        console.log('>===>> ' + ComponentName + ' The post deleted permanently.' );
+      } else {
+        console.log('>===>> ' + ComponentName + ' The deletion is Canceled!');
+      }
+    });
+
+
   }
   
 }

@@ -3,6 +3,8 @@ import { inject, Injectable } from '@angular/core';
 import { catchError, Observable, of, retry, throwError } from 'rxjs';
 import { IArticle, IArticleDTO, ICategory } from '../objects/dataObjects';
 import { environment } from '../../environments/environment';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from './dialog/dialog.component';
 
 const ComponentName = 'DataService';
 
@@ -13,7 +15,8 @@ export class DataService {
   constructor() {}
 
   private http = inject(HttpClient);
-
+  private dialog = inject(MatDialog);
+  
   componentName = this.constructor.name.replace('_', '');
   // baseURL: string = '/assets/';
   // baseURL: string = 'http://localhost:8080/blogapi/';
@@ -116,7 +119,18 @@ export class DataService {
       // Get server-side error
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
-    window.alert(errorMessage);
+    // window.alert(errorMessage);
+    // Un-tested, here:
+    const dialogRef = this.dialog.open(DialogComponent, {
+      data: {
+        token: 'error',
+        header: 'Error Accessing Backend!',
+        content: errorMessage,
+        posAnsMsg: 'OK',
+        negAnsMsg: ''
+      },
+      disableClose: true
+    });
     return throwError(() => {
       return errorMessage;
     });
